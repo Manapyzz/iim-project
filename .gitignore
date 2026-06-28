@@ -1,0 +1,20 @@
+# Secrets - JAMAIS dans git
+.env
+.env.*
+*.secrets
+.secrets
+
+# Cles API en clair (registres etudiants) - JAMAIS dans git
+*.csv
+cles-*.csv
+
+# Documents personnels / administratifs - ne pas exposer
+attachments/
+*.pdf
+
+# macOS
+.DS_Store
+
+# Divers
+*.log
+*.tmp
