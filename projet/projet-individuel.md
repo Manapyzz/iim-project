@@ -61,13 +61,13 @@ Ensuite je passe voir chacun pour **valider ou réorienter** ton idée.
 
 ---
 
-## La soutenance (jeudi après-midi, ~8 min par personne)
+## La soutenance (jeudi après-midi)
 
-Écran partagé, à l'oral. Pas de slides obligatoires. Tu montres :
+**8 minutes par personne** : ~6 min de présentation + ~2 min de questions. Écran partagé, à l'oral, pas de slides obligatoires. Tu montres :
 
-1. **Démo live (2-3 min)** : ton app tourne, tu fais le tour des fonctionnalités.
-2. **Ton cadrage (3 min)** : tu ouvres ton `CLAUDE.md`, tu montres tes skills et tes scripts. Pourquoi ces choix ?
-3. **Ton pilotage (2-3 min)** : un **piège** que tu as rencontré (dette, hallucination, dérive), comment tu l'as cadré, et ce que tu en retiens.
+1. **Démo live (~2 min)** : ton app tourne, tu fais le tour des fonctionnalités.
+2. **Ton cadrage (~2 min)** : tu ouvres ton `CLAUDE.md`, tu montres tes skills et tes scripts. Pourquoi ces choix ?
+3. **Ton pilotage (~2 min)** : un **piège** que tu as rencontré (un bug bizarre, une IA qui part en vrille), comment tu l'as géré, et ce que tu en retiens.
 
 > [!tip] Ce qui impressionne
 > Pas la taille du projet, mais ta **lucidité** : montrer que tu comprends ce que l'IA a produit, que tu l'as cadrée, et que tu sais où sont les pièges.
@@ -76,17 +76,33 @@ Ensuite je passe voir chacun pour **valider ou réorienter** ton idée.
 
 ## La notation
 
-| Part | Sur quoi |
-|------|----------|
-| **50% : Code** | Qualité, architecture, cadrage, **peu de dette IA**, app qui marche. |
-| **30% : Soutenance** | Clarté de la démo, recul sur ta méthode, compréhension de ce que tu as fait. |
-| **20% : Workflow** | La méthode : skills + scripts déterministes + `CLAUDE.md`, commits réguliers, propreté du repo. |
+Trois blocs : **50% le code, 30% la soutenance, 20% ta méthode.**
 
-### Les 3 niveaux d'exigence
+> [!info] Certains mots ne te parlent pas encore ?
+> "Skills", "scripts déterministes", "dette IA"... c'est normal au J1, tu ne connais pas encore tout. On les voit ensemble au fil de la semaine. Garde juste l'esprit en tête, la grille deviendra claire au fur et à mesure.
 
-- **~12 (correct)** : une app qui marche, persistance, UI utilisable, un `CLAUDE.md` basique, 2 skills.
-- **~14-16 (bien)** : en plus, un cadrage propre, des scripts déterministes, des cas limites gérés, peu de dette.
-- **~18-20 (excellent)** : en plus, une architecture soignée, des garde-fous, les anti-patterns évités, une méthode exemplaire et un projet abouti.
+### 50% : ton code
+
+On ne note **pas** "est-ce que l'IA écrit bien" (elle écrit pour tout le monde pareil). On note **ce que ton pilotage en a fait**. Avec le même outil, deux personnes rendent des projets très différents. Concrètement on regarde :
+
+- **Ça marche** : ton app tourne, les fonctionnalités annoncées fonctionnent, et les cas bizarres (champ vide, mauvaise saisie) ne cassent pas tout.
+- **C'est rangé** : du code structuré, des fichiers de taille raisonnable, pas un seul fichier fourre-tout de 500 lignes.
+- **Peu de "rustines"** : pas d'erreurs masquées, de délais magiques, de code mort, de copier-coller, de noms incohérents d'un fichier à l'autre. On t'apprend à repérer ces pièges dès le J1.
+- **Tu comprends ton code** : tu peux expliquer n'importe quel morceau. C'est LE critère central : si tu sais l'expliquer, tu as piloté ; si tu ne sais pas, tu as juste laissé faire.
+
+### 30% : ta soutenance
+
+La clarté de ta démo, ta capacité à expliquer ta méthode, et le recul que tu as sur ce que tu as construit.
+
+### 20% : ta méthode (workflow)
+
+Comment tu as travaillé : un `CLAUDE.md` qui cadre l'IA, des skills et des scripts qui tiennent la route, des commits réguliers (pas un seul gros dépôt à la fin), un repo propre. *(Tout ça s'apprend à partir du J2.)*
+
+### Les niveaux, en clair
+
+- **~12 (correct)** : une app qui marche, avec de la persistance et une interface utilisable.
+- **~14-16 (bien)** : en plus, un code propre et cadré, des cas limites gérés, peu de dette.
+- **~18-20 (excellent)** : en plus, une vraie rigueur de méthode, des garde-fous, les pièges évités, et tu maîtrises ton projet de bout en bout.
 
 ---
 
