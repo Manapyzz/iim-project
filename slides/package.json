@@ -1,0 +1,24 @@
+{
+  "name": "iim-slides",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Slides Remotion pour le workshop IIM — Stratégie de l'Innovation & IA générative avec Claude Code",
+  "scripts": {
+    "dev": "remotion studio",
+    "present": "vite",
+    "present:build": "vite build",
+    "render:j1": "remotion render IIMJ1Theorie out/j1-theorie.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.472",
+    "@remotion/lottie": "^4.0.472",
+    "@remotion/player": "^4.0.472",
+    "@types/react": "^19.2.16",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.472",
+    "vite": "^6.4.3"
+  }
+}
