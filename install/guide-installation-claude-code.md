@@ -3,132 +3,183 @@
 Bienvenue ! On installe **Claude Code** ensemble au début de la formation (J1), en suivant ce guide.
 Ça prend **5 à 10 minutes**. Suis les étapes dans l'ordre, ne saute rien.
 
-À la fin tu auras :
-- Claude Code installé
-- Ta clé personnelle configurée (elle te sera donnée séparément)
-- Un test qui confirme que tout marche
-
 > [!info] C'est quoi le principe
-> Tu utilises Claude Code normalement, mais tes requêtes passent par un **proxy** géré par le formateur. Tu n'as donc **pas besoin de compte Claude payant** : ta clé personnelle suffit. Chaque étudiant a un budget plafonné.
+> Tu utilises Claude Code normalement, mais tes requêtes passent par un **proxy** géré par le formateur. Tu n'as donc **pas besoin d'un compte Claude payant** : ta clé personnelle suffit. Chaque étudiant a un budget plafonné.
+
+## Deux façons de l'utiliser (tu choisis)
+
+| Mode | Pour qui | Interface |
+|------|----------|-----------|
+| **Terminal** | Le plus simple, recommandé pour démarrer | Dans une fenêtre de terminal |
+| **Extension VS Code** | Si tu codes déjà dans VS Code | Intégré à ton éditeur |
+
+Les deux passent par le proxy. Tu peux même faire les deux : **la configuration de ta clé (Étape 2) est commune aux deux.**
 
 ---
 
 ## Étape 0 : as-tu déjà Claude Code ?
 
-Avant d'installer, vérifie. Ouvre ton terminal (Terminal sur Mac/Linux, PowerShell sur Windows) et tape :
+Avant d'installer, vérifie. Ouvre un terminal (Terminal sur Mac/Linux, PowerShell sur Windows) et tape :
 
 ```bash
 claude --version
 ```
 
-- **Un numéro de version s'affiche** (ex : `2.1.195`) → tu l'as déjà, **saute l'Étape 1** et va directement à l'Étape 2.
-- **"command not found" / "n'est pas reconnu"** → tu ne l'as pas (ou pas dans le PATH), continue à l'Étape 1.
+- **Un numéro s'affiche** (ex : `2.1.195`) → déjà installé, **saute l'Étape 1**, va directement à l'Étape 2.
+- **"command not found" / "n'est pas reconnu"** → pas encore installé, continue à l'Étape 1.
 
 ---
 
 ## Étape 1 : Installer Claude Code
 
-Choisis **ta** section selon ton ordinateur.
+Choisis **l'Option A** (terminal) ou **l'Option B** (VS Code), selon le mode que tu veux.
 
-### 🍎 Sur Mac / 🐧 Sur Linux (Ubuntu, etc.)
+### Option A : en terminal (CLI)
 
-La commande d'installation est la **même** sur Mac et Linux.
+#### 🍎 Mac / 🐧 Linux (Ubuntu, etc.)
 
 1. Ouvre un **terminal** :
-   - **Mac** : cherche "Terminal" dans Spotlight (`Cmd + Espace`).
-   - **Linux/Ubuntu** : raccourci `Ctrl + Alt + T`, ou cherche "Terminal" dans tes applications.
-2. Copie-colle cette ligne, puis appuie sur **Entrée** :
+   - **Mac** : Spotlight (`Cmd + Espace`), tape "Terminal".
+   - **Linux/Ubuntu** : `Ctrl + Alt + T`.
+2. Colle cette ligne, puis **Entrée** :
 
    ```bash
    curl -fsSL https://claude.ai/install.sh | bash
    ```
 
-3. Attends la fin de l'installation. Si on te demande ton mot de passe, c'est normal, tape-le (il reste invisible) et Entrée.
-4. **Ferme et rouvre le terminal** (important, pour qu'il reconnaisse la commande).
+3. Attends la fin. Si on te demande ton mot de passe, c'est normal (il reste invisible), tape-le et Entrée.
+4. **Ferme et rouvre le terminal**, puis vérifie : `claude --version` doit afficher un numéro.
 
-### 🪟 Sur Windows
+> [!warning] "command not found: claude" après installation (Mac/Linux)
+> Le programme est installé dans `~/.local/bin` mais ce dossier n'est pas dans ton PATH. Ajoute-le une bonne fois :
+> - **Mac (zsh)** :
+>   ```bash
+>   echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
+>   ```
+> - **Linux (bash)** :
+>   ```bash
+>   echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
+>   ```
+> Puis `claude --version`.
 
-Ouvre **PowerShell** (cherche "PowerShell" dans le menu Démarrer). Deux méthodes, prends la **A** en priorité.
+#### 🪟 Windows
 
-**Méthode A (recommandée) : WinGet.** C'est le gestionnaire d'applications de Windows, il s'occupe de tout (PATH compris), donc moins de soucis.
+Ouvre **PowerShell** (menu Démarrer). Deux méthodes, prends la **A** en priorité.
+
+**Méthode A (recommandée) : WinGet.** Le gestionnaire d'applications de Windows, il gère le PATH tout seul.
 
 ```powershell
 winget install Anthropic.ClaudeCode
 ```
 
-**Méthode B (si WinGet n'existe pas ou échoue) : le script officiel.**
+**Méthode B (si WinGet échoue) : le script officiel.**
 
 ```powershell
 irm https://claude.ai/install.ps1 | iex
 ```
 
-Ensuite, dans les deux cas :
-1. Attends la fin de l'installation.
-2. **Ferme et rouvre PowerShell** (obligatoire pour que `claude` soit reconnu).
-3. Vérifie : `claude --version` doit afficher un numéro.
+Ensuite, dans les deux cas : **ferme et rouvre PowerShell**, puis vérifie `claude --version`.
 
 > [!warning] "claude n'est pas reconnu" même après installation (surtout méthode B)
-> Ça veut dire que le programme est installé mais Windows ne sait pas où le trouver (problème de PATH). Vérifie d'abord qu'il est bien là :
+> Le programme est installé mais Windows ne le trouve pas (PATH). Vérifie d'abord qu'il est là :
 > ```powershell
 > & "$env:USERPROFILE\.local\bin\claude.exe" --version
 > ```
-> Si ça affiche un numéro, ajoute le dossier au PATH une bonne fois :
+> Si un numéro s'affiche, ajoute le dossier au PATH :
 > ```powershell
 > $p = [Environment]::GetEnvironmentVariable('PATH','User')
 > [Environment]::SetEnvironmentVariable('PATH', "$p;$env:USERPROFILE\.local\bin", 'User')
 > ```
-> Puis **ferme et rouvre PowerShell** (le PATH ne se met à jour que dans les nouvelles fenêtres). `claude --version` marchera alors sans le chemin complet.
+> Puis **ferme et rouvre PowerShell** (le PATH ne se met à jour que dans une nouvelle fenêtre).
+
+### Option B : dans VS Code (extension)
+
+1. Ouvre **VS Code**.
+2. Ouvre le panneau Extensions (`Cmd + Shift + X` sur Mac, `Ctrl + Shift + X` sur Windows/Linux).
+3. Cherche **"Claude Code"** (éditeur : **Anthropic**) et clique **Install**.
+   *(Alternative en ligne de commande : `code --install-extension anthropic.claude-code`)*
+
+> [!info] Pas besoin du CLI séparé
+> L'extension embarque sa propre version de Claude Code. Tu peux donc utiliser l'Option B sans faire l'Option A. (Si tu veux quand même taper `claude` dans le terminal intégré de VS Code, fais aussi l'Option A.)
 
 ---
 
-## Étape 2 : Configurer ta clé personnelle
+## Étape 2 : Configurer ta clé (commun terminal + VS Code)
 
-On va donner 2 informations à Claude Code : **l'adresse du proxy** et **ta clé**.
+C'est l'étape clé. On écrit ta clé une bonne fois dans un fichier de config. **C'est permanent** (rien à retaper à chaque session) et **ça marche pour le terminal comme pour VS Code**.
 
-⚠️ Remplace `COLLE_TA_CLÉ_ICI` par la clé personnelle que le formateur t'a donnée (elle ressemble à `sk-xxxxxxxxxxxx`).
+⚠️ Dans la commande ci-dessous, remplace `COLLE_TA_CLÉ_ICI` par la clé personnelle que le formateur t'a donnée (`sk-...`) **avant** de l'exécuter.
 
-### 🍎 Mac / 🐧 Linux (dans le terminal)
+### 🍎 Mac / 🐧 Linux
+
+Colle ceci dans le terminal (après avoir mis ta clé) :
 
 ```bash
-export ANTHROPIC_BASE_URL=https://78-47-61-209.sslip.io
-export ANTHROPIC_API_KEY=COLLE_TA_CLÉ_ICI
+mkdir -p ~/.claude
+cat > ~/.claude/settings.json <<'EOF'
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://78-47-61-209.sslip.io",
+    "ANTHROPIC_API_KEY": "COLLE_TA_CLÉ_ICI"
+  }
+}
+EOF
 ```
 
-### 🪟 Sur Windows (dans PowerShell)
+### 🪟 Windows (PowerShell)
+
+Colle ceci (après avoir mis ta clé) :
 
 ```powershell
-$env:ANTHROPIC_BASE_URL = "https://78-47-61-209.sslip.io"
-$env:ANTHROPIC_API_KEY = "COLLE_TA_CLÉ_ICI"
+$dir = "$env:USERPROFILE\.claude"
+New-Item -ItemType Directory -Force -Path $dir | Out-Null
+@'
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://78-47-61-209.sslip.io",
+    "ANTHROPIC_API_KEY": "COLLE_TA_CLÉ_ICI"
+  }
+}
+'@ | Set-Content -Encoding utf8 "$dir\settings.json"
 ```
 
-> [!warning] Ces lignes ne durent que le temps de la fenêtre
-> Si tu fermes le terminal, tu devras **les retaper** la prochaine fois (avant de relancer `claude`).
-> Voir tout en bas pour les rendre permanentes (optionnel).
+> [!tip] Pourquoi cette méthode
+> Le fichier `settings.json` est lu automatiquement par Claude Code (terminal ET extension VS Code), quel que soit la façon dont tu le lances. Plus de variables à recoller à chaque ouverture de fenêtre.
+
+> [!warning] Si tu avais déjà un fichier `settings.json`
+> La commande l'écrase. Si tu utilisais déjà Claude Code avec des réglages perso, préviens le formateur pour qu'on fusionne proprement au lieu d'écraser.
 
 ---
 
-## Étape 3 : Lancer Claude Code et tester
+## Étape 3 : Lancer et tester
 
-1. Dans le **même** terminal (celui où tu viens de coller ta clé), tape :
+### En terminal (Option A)
 
-   ```bash
-   claude
-   ```
+Tape :
 
-2. La première fois, Claude Code peut poser quelques questions de configuration (thème, etc.) → choisis ce que tu veux, ça n'a pas d'importance.
+```bash
+claude
+```
 
-   > [!warning] S'il te propose de te connecter à un compte Claude
-   > **Ne te connecte PAS** avec un compte Claude/Anthropic. Ta clé personnelle (Étape 2) gère déjà l'authentification. Si un écran de login apparaît, cherche une option pour passer/annuler, ou ferme et vérifie que tu as bien collé ta clé à l'étape 2.
+### Dans VS Code (Option B)
 
-3. Une fois dans Claude Code, écris par exemple :
+1. **Une seule fois**, désactive la demande de connexion : ouvre les réglages (`Cmd/Ctrl + ,`), cherche **"Claude Code Disable Login Prompt"**, et **coche la case**. (Comme ta clé est dans `settings.json`, pas besoin de login compte.)
+2. Ouvre le panneau **Claude Code** : clique sur l'icône Claude dans la barre latérale, ou `Cmd/Ctrl + Shift + P` puis tape "Claude Code".
 
-   ```
-   Bonjour, réponds juste "OK ça marche".
-   ```
+### Le test (dans les deux cas)
 
-4. S'il te répond → **tout est bon, tu es prêt pour la formation.** 🎉
+Écris :
 
-Pour quitter Claude Code : tape `/exit` ou fais `Ctrl + C` deux fois.
+```
+Bonjour, réponds juste "OK ça marche".
+```
+
+S'il te répond → **tout est bon, tu es prêt.** 🎉
+
+> [!warning] S'il te propose quand même de te connecter à un compte Claude
+> **Ne te connecte PAS.** Ça veut dire que ta clé n'a pas été lue. Vérifie l'Étape 2 (le fichier `settings.json` bien créé, ta clé bien collée, sans espace ni guillemet en trop). En VS Code, vérifie aussi que "Disable Login Prompt" est coché.
+
+Pour quitter en terminal : `/exit` ou `Ctrl + C` deux fois.
 
 ---
 
@@ -136,51 +187,34 @@ Pour quitter Claude Code : tape `/exit` ou fais `Ctrl + C` deux fois.
 
 | Symptôme | Solution |
 |----------|----------|
-| `command not found: claude` (Mac/Linux) / `claude n'est pas reconnu` (Windows) | Ferme et rouvre le terminal. Sur Windows si ça persiste, c'est le PATH : voir l'encadré ⚠️ de l'Étape 1 (Windows). Sinon refais l'Étape 1. |
-| (Windows) j'ai modifié le PATH mais `claude` n'est toujours pas reconnu | Une modif du PATH ne s'applique qu'aux **nouvelles** fenêtres PowerShell. Ferme celle-ci et rouvre-en une neuve. |
-| Erreur **401 / Authentication** | Ta clé est mal collée (espace en trop, guillemets, clé incomplète). Refais l'Étape 2 proprement. |
+| `command not found: claude` / `n'est pas reconnu` | Ferme et rouvre le terminal. Si ça persiste, c'est le PATH : voir l'encadré ⚠️ de l'Étape 1 (ton OS). |
+| (Windows) PATH modifié mais toujours pas reconnu | Une modif du PATH ne s'applique qu'aux **nouvelles** fenêtres. Ferme celle-ci, rouvres-en une. |
+| Erreur **401 / Authentication** | Clé mal collée (espace, guillemet, clé incomplète) dans `settings.json`. Refais l'Étape 2. |
+| On me demande de me connecter à un compte | Ta clé n'est pas lue : vérifie `settings.json` (Étape 2). En VS Code, coche "Disable Login Prompt". |
 | Erreur **429 / budget exceeded** | Ton budget est épuisé, préviens le formateur. |
-| Erreur **model not allowed** | Tu as demandé un modèle non autorisé (ex : Opus). Reste sur le modèle par défaut. |
-| Ça marchait, puis plus rien après avoir fermé le terminal | Normal : retape les 2 lignes de l'Étape 2 avant de relancer `claude`. |
+| Erreur **model not allowed** | Modèle non autorisé (ex : Opus). Reste sur le modèle par défaut. |
+| (VS Code Mac) la clé n'est pas prise alors qu'elle marche en terminal | Normalement réglé par `settings.json`. Sinon, lance VS Code depuis un terminal avec `code .`. |
 
 ---
 
-## (Optionnel) Rendre ta clé permanente
+## Annexe : alternative par variables d'environnement
 
-Pour ne plus avoir à retaper les 2 lignes à chaque fois :
+La méthode `settings.json` (Étape 2) est la plus simple et la recommandée. Si tu préfères les variables d'environnement, tu peux à la place les rendre permanentes :
 
-### 🍎 Mac
+- **Mac (zsh)** :
+  ```bash
+  echo 'export ANTHROPIC_BASE_URL=https://78-47-61-209.sslip.io' >> ~/.zshrc
+  echo 'export ANTHROPIC_API_KEY=COLLE_TA_CLÉ_ICI' >> ~/.zshrc
+  ```
+- **Linux (bash)** : pareil dans `~/.bashrc`.
+- **Windows (PowerShell)** :
+  ```powershell
+  setx ANTHROPIC_BASE_URL "https://78-47-61-209.sslip.io"
+  setx ANTHROPIC_API_KEY "COLLE_TA_CLÉ_ICI"
+  ```
+  Puis ferme/rouvre PowerShell.
 
-Dans le Terminal, colle ceci (avec **ta** clé à la place de `COLLE_TA_CLÉ_ICI`) :
-
-```bash
-echo 'export ANTHROPIC_BASE_URL=https://78-47-61-209.sslip.io' >> ~/.zshrc
-echo 'export ANTHROPIC_API_KEY=COLLE_TA_CLÉ_ICI' >> ~/.zshrc
-```
-
-Puis ferme/rouvre le terminal. C'est mémorisé.
-
-### 🐧 Linux (Ubuntu, etc.)
-
-Pareil, mais dans `~/.bashrc` (le fichier de config par défaut sur Ubuntu) :
-
-```bash
-echo 'export ANTHROPIC_BASE_URL=https://78-47-61-209.sslip.io' >> ~/.bashrc
-echo 'export ANTHROPIC_API_KEY=COLLE_TA_CLÉ_ICI' >> ~/.bashrc
-```
-
-Puis ferme/rouvre le terminal. C'est mémorisé.
-
-### 🪟 Windows
-
-Dans PowerShell, colle ceci (avec **ta** clé) :
-
-```powershell
-setx ANTHROPIC_BASE_URL "https://78-47-61-209.sslip.io"
-setx ANTHROPIC_API_KEY "COLLE_TA_CLÉ_ICI"
-```
-
-Puis ferme/rouvre PowerShell. C'est mémorisé.
+Ne mélange pas les deux méthodes : choisis `settings.json` **ou** les variables, pas les deux.
 
 ---
 
