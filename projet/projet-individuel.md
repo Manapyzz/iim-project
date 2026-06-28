@@ -49,7 +49,7 @@ Ensuite je passe voir chacun pour **valider ou réorienter** ton idée.
 
 ## Le rendu
 
-- Un **repo GitHub privé** (tu le crées au J1), avec **alexptpb** invité en collaborateur.
+- Un **repo GitHub privé** (tu le crées au J1), avec **Manapyzz** invité en collaborateur.
 - Le repo doit contenir :
   - L'**app fonctionnelle** (code + de quoi la lancer)
   - Ton **`CLAUDE.md`** de cadrage
