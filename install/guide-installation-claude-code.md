@@ -118,9 +118,11 @@ Colle ceci dans le terminal (après avoir mis ta clé) :
 mkdir -p ~/.claude
 cat > ~/.claude/settings.json <<'EOF'
 {
+  "model": "claude-sonnet-4-6",
   "env": {
     "ANTHROPIC_BASE_URL": "https://78-47-61-209.sslip.io",
-    "ANTHROPIC_API_KEY": "COLLE_TA_CLÉ_ICI"
+    "ANTHROPIC_API_KEY": "COLLE_TA_CLÉ_ICI",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-haiku-4-5"
   }
 }
 EOF
@@ -135,9 +137,11 @@ $dir = "$env:USERPROFILE\.claude"
 New-Item -ItemType Directory -Force -Path $dir | Out-Null
 @'
 {
+  "model": "claude-sonnet-4-6",
   "env": {
     "ANTHROPIC_BASE_URL": "https://78-47-61-209.sslip.io",
-    "ANTHROPIC_API_KEY": "COLLE_TA_CLÉ_ICI"
+    "ANTHROPIC_API_KEY": "COLLE_TA_CLÉ_ICI",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-haiku-4-5"
   }
 }
 '@ | Set-Content -Encoding utf8 "$dir\settings.json"
@@ -145,6 +149,9 @@ New-Item -ItemType Directory -Force -Path $dir | Out-Null
 
 > [!tip] Pourquoi cette méthode
 > Le fichier `settings.json` est lu automatiquement par Claude Code (terminal ET extension VS Code), quel que soit la façon dont tu le lances. Plus de variables à recoller à chaque ouverture de fenêtre.
+
+> [!info] Pourquoi la ligne `"model"`
+> Par défaut, Claude Code démarre sur **Opus**, un modèle qui n'est **pas autorisé** sur le proxy de la formation (tu aurais une erreur à chaque message). La ligne `"model": "claude-sonnet-4-6"` te met d'office sur **Sonnet** (autorisé, et largement suffisant). La ligne `ANTHROPIC_DEFAULT_HAIKU_MODEL` fait pareil pour les petites tâches en arrière-plan (elles tournent sur Haiku). Tu n'as donc **jamais besoin de changer de modèle à la main.**
 
 > [!warning] Si tu avais déjà un fichier `settings.json`
 > La commande l'écrase. Si tu utilisais déjà Claude Code avec des réglages perso, préviens le formateur pour qu'on fusionne proprement au lieu d'écraser.
@@ -192,7 +199,7 @@ Pour quitter en terminal : `/exit` ou `Ctrl + C` deux fois.
 | Erreur **401 / Authentication** | Clé mal collée (espace, guillemet, clé incomplète) dans `settings.json`. Refais l'Étape 2. |
 | On me demande de me connecter à un compte | Ta clé n'est pas lue : vérifie `settings.json` (Étape 2). En VS Code, coche "Disable Login Prompt". |
 | Erreur **429 / budget exceeded** | Ton budget est épuisé, préviens le formateur. |
-| Erreur **model not allowed** | Modèle non autorisé (ex : Opus). Reste sur le modèle par défaut. |
+| Erreur **model not allowed** | Tu as changé manuellement pour un modèle non autorisé (ex : Opus via `/model`). Reviens sur Sonnet : `/model claude-sonnet-4-6`. Avec le `settings.json` de l'Étape 2, ça n'arrive normalement pas. |
 | (VS Code Mac) la clé n'est pas prise alors qu'elle marche en terminal | Normalement réglé par `settings.json`. Sinon, lance VS Code depuis un terminal avec `code .`. |
 
 ---
