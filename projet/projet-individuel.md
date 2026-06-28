@@ -83,42 +83,45 @@ Ensuite je passe voir chacun pour **valider ou réorienter** ton idée.
 
 ---
 
-## La notation
+## Comment tu es noté
 
-Trois blocs : **40% le code, 30% ta méthode, 30% la soutenance.** La méthode pèse lourd, parce que c'est le vrai sujet du cours : **piloter** l'IA, pas juste générer du code.
+On regarde trois choses : **ton code** (est-il sain et fonctionnel), **ta méthode** (as-tu cadré l'IA au lieu de la laisser faire) et **ta soutenance** (sais-tu expliquer et défendre ce que tu as fait).
 
-> [!info] Certains mots ne te parlent pas encore ?
-> "Skills", "scripts déterministes", "dette IA"... c'est normal au J1, tu ne connais pas encore tout. On les voit ensemble au fil de la semaine. Garde juste l'esprit en tête, la grille deviendra claire au fur et à mesure.
+Pas de calcul de pourcentages. Voici concrètement ce qui t'amène à chaque niveau. Lis ça comme une cible : plus tu coches de choses, plus tu montes.
 
-### 40% : ton code
+> [!info] Le principe
+> On ne note **pas** "est-ce que l'IA écrit bien" (elle écrit pour tout le monde pareil). On note **ce que ton pilotage en a fait** : avec le même outil, deux personnes rendent des projets très différents. Et certains mots ("skills", "scripts déterministes", "dette IA") deviendront clairs au fil de la semaine, pas de panique au J1.
 
-On ne note **pas** "est-ce que l'IA écrit bien" (elle écrit pour tout le monde pareil). On note **ce que ton pilotage en a fait**. Avec le même outil, deux personnes rendent des projets très différents. Concrètement on regarde :
+### Pour valider ton projet (autour de 12)
 
-- **Ça marche** : ton app tourne, les fonctionnalités annoncées fonctionnent, et les cas bizarres (champ vide, mauvaise saisie) ne cassent pas tout.
-- **C'est rangé** : du code structuré, des fichiers de taille raisonnable, pas un seul fichier fourre-tout de 500 lignes.
-- **Peu de "rustines"** : pas d'erreurs masquées, de délais magiques, de code mort, de copier-coller, de noms incohérents d'un fichier à l'autre. On t'apprend à repérer ces pièges dès le J1.
-- **Tu comprends ton code** : tu peux expliquer n'importe quel morceau. C'est LE critère central : si tu sais l'expliquer, tu as piloté ; si tu ne sais pas, tu as juste laissé faire.
+- Ton app **tourne** et fait ce qu'elle annonce.
+- Les données **persistent** (elles survivent à un rechargement).
+- L'interface est **utilisable**.
+- Tu as commencé à cadrer l'IA avec un **`CLAUDE.md`**.
 
-### 30% : ta méthode (workflow)
+> En clair : tu as réussi à piloter l'IA jusqu'à un produit qui marche.
 
-C'est le cœur du cours. Comment tu as cadré l'IA, pas juste ce que tu lui as fait produire :
+### Pour un bon projet (autour de 14-16)
 
-- un **`CLAUDE.md`** qui pose les règles et les conventions à l'IA,
-- des **skills** (au moins 2) et surtout des **scripts déterministes** qui tiennent la route : tout ce qui doit être fiable passe par du code écrit une fois, pas par l'IA à chaque prompt,
-- des **commits réguliers** (pas un seul gros dépôt à la fin) qui montrent que tu as travaillé en petites étapes,
-- un **repo propre** (README, `.gitignore`, pas de secrets).
+Tout ce qui précède, **et en plus** :
 
-*(Tout ça s'apprend à partir du J2.)*
+- ton code est **rangé** (fichiers de taille raisonnable, pas de fourre-tout de 500 lignes) et avec **peu de rustines** (pas d'erreurs masquées, de code mort, de copier-coller, de noms incohérents) ;
+- tu as de **vrais skills et de vrais scripts déterministes** qui font le travail fiable à la place de l'IA ;
+- les **cas limites** sont gérés (champ vide, mauvaise saisie) ;
+- tes **commits** montrent un travail en petites étapes (pas un seul gros dépôt à la fin) ;
+- en soutenance, **tu expliques ce que tu as fait**.
 
-### 30% : ta soutenance
+### Pour un projet excellent (autour de 18-20)
 
-La clarté de ta démo, ta capacité à expliquer ta méthode, et le recul que tu as sur ce que tu as construit.
+Tout ce qui précède, **et en plus** :
 
-### Les niveaux, en clair
+- ta **méthode est exemplaire** : un `CLAUDE.md` précis, des skills et scripts propres, l'IA vraiment cadrée du début à la fin ;
+- tu as mis des **garde-fous** et tu as évité les pièges qu'on aura nommés en cours ;
+- ton projet est **abouti et ambitieux** : de vraies fonctionnalités à valeur, pas juste du CRUD ;
+- ta soutenance est **limpide** : tu expliques n'importe quel morceau de ton code et tu prends du recul sur ta méthode.
 
-- **~12 (correct)** : une app qui marche, avec de la persistance et une interface utilisable.
-- **~14-16 (bien)** : en plus, un code propre et cadré, des cas limites gérés, peu de dette.
-- **~18-20 (excellent)** : en plus, une vraie rigueur de méthode, des garde-fous, les pièges évités, et tu maîtrises ton projet de bout en bout.
+> [!tip] Le critère qui fait vraiment la différence
+> **Tu comprends ton code.** Si tu peux expliquer n'importe quel bout en soutenance, tu as piloté l'IA. Si tu ne peux pas, tu l'as juste laissée faire. C'est ça qui sépare un 12 d'un 18, pas la puissance du modèle.
 
 ---
 

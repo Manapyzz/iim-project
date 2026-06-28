@@ -24,9 +24,8 @@ const ICON = {
   alert: 'wired-flat-2263-alert-hover-pinch.json',
   cogs: 'wired-flat-40-cogs-hover-mechanic.json',
   globe: 'wired-flat-735-world-globe-hover-roll.json',
-  // À télécharger pour les 2 nouvelles slides (sinon affichage vide / placeholder)
-  calendar: 'wired-flat-28-calendar-day-hover-line.json',
-  trophy: 'wired-flat-1340-trophy-hover-pinch.json',
+  calendar: 'wired-flat-28-calendar-hover-pinch.json',
+  trophy: 'wired-flat-3263-trophy-circle-hover-roll.json',
 };
 
 // ---------- Layouts ----------
@@ -237,47 +236,101 @@ const S0: React.FC = () => (
   </Centered>
 );
 
-// S1 — Bloc A : c'est quoi un LLM (avec lien cliquable vers tiktokenizer)
+// S1 — Bloc A : c'est quoi un LLM — avec démo séquence autoregressive
 const S1: React.FC = () => {
   const frame = useCurrentFrame();
-  const linkOpacity = interpolate(frame, [60, 72], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  // Séquence de tokens qui s'ajoutent l'un après l'autre
+  const tokens = ['Le', 'chat', 'dort', 'sur', 'le', 'canapé', '.'];
   return (
-    <>
-      <Split
-        side="left"
-        file={ICON.brackets}
-        color={COLORS.blue}
-        kicker="SOUS LE CAPOT"
-        label="Un prédicteur de tokens autoregressif."
-        extra={
-          <a
-            href="https://tiktokenizer.vercel.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              opacity: linkOpacity,
-              marginTop: 24,
-              padding: '14px 28px',
-              border: `2px solid ${COLORS.orange}`,
-              borderRadius: 10,
-              fontFamily: FONT_FAMILY,
-              fontWeight: 700,
-              fontSize: 26,
-              color: COLORS.orange,
-              textDecoration: 'none',
-              background: `${COLORS.orange}10`,
-              alignSelf: 'flex-start',
-              transition: 'all .2s ease',
-            }}
-          >
-            ▶ Démo : tiktokenizer.vercel.app
-          </a>
-        }
+    <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 28}}>
+      <KineticText text="LE LLM, C'EST QUOI ?" fontSize={30} color={COLORS.orange} />
+      <KineticText
+        text="Un prédicteur de tokens autoregressif."
+        delay={18}
+        fontSize={52}
       />
-    </>
+      {/* Séquence visuelle des tokens prédits l'un après l'autre */}
+      <div
+        style={{
+          display: 'flex',
+          gap: 12,
+          marginTop: 28,
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        }}
+      >
+        {tokens.map((t, i) => {
+          const delay = 42 + i * 8;
+          const o = interpolate(frame, [delay, delay + 10], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          const y = interpolate(frame, [delay, delay + 10], [16, 0], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          const isLast = i === tokens.length - 1;
+          return (
+            <span
+              key={i}
+              style={{
+                fontFamily: '"JetBrains Mono", "Fira Code", Menlo, monospace',
+                fontWeight: 700,
+                fontSize: 32,
+                color: isLast ? COLORS.orange : COLORS.text,
+                background: '#1a2030',
+                padding: '8px 16px',
+                borderRadius: 8,
+                opacity: o,
+                transform: `translateY(${y}px)`,
+                border: isLast ? `2px solid ${COLORS.orange}` : 'none',
+              }}
+            >
+              {t}
+            </span>
+          );
+        })}
+      </div>
+      <span
+        style={{
+          fontFamily: FONT_FAMILY,
+          fontSize: 22,
+          color: COLORS.blue,
+          marginTop: 12,
+          opacity: interpolate(frame, [110, 122], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+        }}
+      >
+        Un token à la fois. Toujours.
+      </span>
+      {/* Lien démo */}
+      <a
+        href="https://tiktokenizer.vercel.app/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          opacity: interpolate(frame, [125, 137], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+          marginTop: 18,
+          padding: '12px 24px',
+          border: `2px solid ${COLORS.orange}`,
+          borderRadius: 10,
+          fontFamily: FONT_FAMILY,
+          fontWeight: 700,
+          fontSize: 22,
+          color: COLORS.orange,
+          textDecoration: 'none',
+          background: `${COLORS.orange}10`,
+        }}
+      >
+        ▶ Démo en live : tiktokenizer.vercel.app
+      </a>
+    </AbsoluteFill>
   );
 };
 
@@ -318,16 +371,109 @@ const S2: React.FC = () => (
   </AbsoluteFill>
 );
 
-// S3 — Bloc C : dégradation
-const S3: React.FC = () => (
-  <CenterHero
-    file={ICON.thermo}
-    color={COLORS.orange}
-    kicker="DÉGRADATION — LOST IN THE MIDDLE"
-    label="Plus le contexte gonfle, moins le LLM est précis."
-    labelSize={52}
-  />
-);
+// S3 — Bloc C : dégradation — schéma "U" attention début/milieu/fin
+const S3: React.FC = () => {
+  const frame = useCurrentFrame();
+  // 12 segments représentant une jauge / barre de contexte. Le milieu est en orange faible.
+  const segments = Array.from({length: 12}, (_, i) => i);
+  return (
+    <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 28}}>
+      <KineticText text="DÉGRADATION — LOST IN THE MIDDLE" fontSize={28} color={COLORS.orange} />
+      <KineticText
+        text="Plus le contexte gonfle, moins il est précis."
+        delay={18}
+        fontSize={48}
+      />
+      {/* Schéma "barre d'attention" : début et fin solides, milieu pâle */}
+      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, marginTop: 18}}>
+        <div style={{display: 'flex', gap: 6}}>
+          {segments.map((i) => {
+            const delay = 40 + i * 4;
+            // Intensité d'attention : forte au début et à la fin, faible au milieu (forme U inversé inversé = forme U)
+            const pos = i / (segments.length - 1);
+            const attention = Math.abs(pos - 0.5) * 2; // 0 au milieu, 1 aux bords
+            const o = interpolate(frame, [delay, delay + 8], [0, 1], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+            });
+            const h = 60 + attention * 60;
+            return (
+              <div
+                key={i}
+                style={{
+                  width: 50,
+                  height: h,
+                  borderRadius: 6,
+                  background: COLORS.orange,
+                  opacity: o * (0.25 + attention * 0.7),
+                  alignSelf: 'flex-end',
+                }}
+              />
+            );
+          })}
+        </div>
+        <div style={{display: 'flex', justifyContent: 'space-between', width: 670, marginTop: 4}}>
+          <span
+            style={{
+              fontFamily: FONT_FAMILY,
+              fontSize: 18,
+              color: COLORS.text,
+              opacity: 0.8,
+              letterSpacing: 1,
+            }}
+          >
+            DÉBUT (attention forte)
+          </span>
+          <span
+            style={{
+              fontFamily: FONT_FAMILY,
+              fontSize: 18,
+              color: COLORS.text,
+              opacity: 0.5,
+              letterSpacing: 1,
+            }}
+          >
+            MILIEU (oublié)
+          </span>
+          <span
+            style={{
+              fontFamily: FONT_FAMILY,
+              fontSize: 18,
+              color: COLORS.text,
+              opacity: 0.8,
+              letterSpacing: 1,
+            }}
+          >
+            FIN (attention forte)
+          </span>
+        </div>
+      </div>
+      <a
+        href="https://arxiv.org/abs/2307.03172"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          opacity: interpolate(frame, [115, 127], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+          marginTop: 14,
+          padding: '10px 22px',
+          border: `2px solid ${COLORS.blue}`,
+          borderRadius: 10,
+          fontFamily: FONT_FAMILY,
+          fontWeight: 700,
+          fontSize: 20,
+          color: COLORS.blue,
+          textDecoration: 'none',
+          background: `${COLORS.blue}10`,
+        }}
+      >
+        📄 Source : Liu et al. 2023 — Lost in the Middle
+      </a>
+    </AbsoluteFill>
+  );
+};
 
 // S4 — Bloc D intro : pricing — chiffres clés visibles
 const S4: React.FC = () => {
@@ -438,16 +584,90 @@ const S7: React.FC = () => (
   </AbsoluteFill>
 );
 
-// S8 — Bloc F : écosystème — globe
-const S8: React.FC = () => (
-  <CenterHero
-    file={ICON.globe}
-    color={COLORS.blue}
-    kicker="L'ÉCOSYSTÈME 2026"
-    label="Claude Code. OpenClaw. Hermes. Ralph Loop."
-    labelSize={48}
-  />
-);
+// S8 — Bloc F : écosystème — 4 cartes outils cliquables
+const S8: React.FC = () => {
+  const frame = useCurrentFrame();
+  const tools = [
+    {name: 'Claude Code', tag: 'Anthropic — CLI dev', url: 'https://claude.com/product/claude-code', color: COLORS.orange},
+    {name: 'OpenClaw', tag: 'Agent perso 24/7', url: 'https://openclaw.ai/', color: COLORS.text},
+    {name: 'Hermes', tag: 'Nous Research — OSS', url: 'https://hermes-agent.nousresearch.com/', color: COLORS.text},
+    {name: 'Ralph Loop', tag: 'Auto-relance infinie', url: 'https://ghuntley.com/ralph/', color: COLORS.blue},
+  ];
+  return (
+    <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 26}}>
+      <Reveal delay={6}>
+        <LordiconIcon file={ICON.globe} color={COLORS.blue} width={140} height={140} />
+      </Reveal>
+      <KineticText text="L'ÉCOSYSTÈME AGENTIQUE — 2026" delay={20} fontSize={30} color={COLORS.orange} />
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: 22,
+          marginTop: 14,
+          maxWidth: 1100,
+        }}
+      >
+        {tools.map((t, i) => {
+          const delay = 38 + i * 10;
+          const o = interpolate(frame, [delay, delay + 12], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          const y = interpolate(frame, [delay, delay + 12], [20, 0], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          return (
+            <a
+              key={i}
+              href={t.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                padding: '20px 28px',
+                border: `2px solid ${t.color}33`,
+                borderRadius: 14,
+                background: `${t.color}08`,
+                opacity: o,
+                transform: `translateY(${y}px)`,
+                textDecoration: 'none',
+                minWidth: 380,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontWeight: 800,
+                  fontSize: 36,
+                  color: t.color,
+                  letterSpacing: 0.5,
+                }}
+              >
+                {t.name}
+              </span>
+              <span
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontWeight: 500,
+                  fontSize: 22,
+                  color: COLORS.text,
+                  opacity: 0.75,
+                  marginTop: 6,
+                }}
+              >
+                {t.tag}
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    </AbsoluteFill>
+  );
+};
 
 // S9 — Programme de la semaine (4 jours)
 const S9: React.FC = () => {
