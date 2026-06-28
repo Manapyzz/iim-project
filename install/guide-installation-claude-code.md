@@ -13,6 +13,19 @@ Bienvenue ! On installe **Claude Code** ensemble au début de la formation (J1),
 
 ---
 
+## Étape 0 : as-tu déjà Claude Code ?
+
+Avant d'installer, vérifie. Ouvre ton terminal (Terminal sur Mac/Linux, PowerShell sur Windows) et tape :
+
+```bash
+claude --version
+```
+
+- **Un numéro de version s'affiche** (ex : `2.1.195`) → tu l'as déjà, **saute l'Étape 1** et va directement à l'Étape 2.
+- **"command not found" / "n'est pas reconnu"** → tu ne l'as pas (ou pas dans le PATH), continue à l'Étape 1.
+
+---
+
 ## Étape 1 : Installer Claude Code
 
 Choisis **ta** section selon ton ordinateur.
@@ -35,18 +48,36 @@ La commande d'installation est la **même** sur Mac et Linux.
 
 ### 🪟 Sur Windows
 
-1. Ouvre **PowerShell** (cherche "PowerShell" dans le menu Démarrer, clic → **Ouvrir**).
-2. Copie-colle cette ligne, puis **Entrée** :
+Ouvre **PowerShell** (cherche "PowerShell" dans le menu Démarrer). Deux méthodes, prends la **A** en priorité.
 
-   ```powershell
-   irm https://claude.ai/install.ps1 | iex
-   ```
+**Méthode A (recommandée) : WinGet.** C'est le gestionnaire d'applications de Windows, il s'occupe de tout (PATH compris), donc moins de soucis.
 
-3. Attends la fin de l'installation.
-4. **Ferme et rouvre PowerShell.**
+```powershell
+winget install Anthropic.ClaudeCode
+```
 
-> [!tip] Vérifier que c'est installé
-> Tape `claude --version` puis Entrée. Si un numéro de version s'affiche, c'est bon. Si tu vois "command not found" / "n'est pas reconnu", ferme/rouvre le terminal et réessaie.
+**Méthode B (si WinGet n'existe pas ou échoue) : le script officiel.**
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+Ensuite, dans les deux cas :
+1. Attends la fin de l'installation.
+2. **Ferme et rouvre PowerShell** (obligatoire pour que `claude` soit reconnu).
+3. Vérifie : `claude --version` doit afficher un numéro.
+
+> [!warning] "claude n'est pas reconnu" même après installation (surtout méthode B)
+> Ça veut dire que le programme est installé mais Windows ne sait pas où le trouver (problème de PATH). Vérifie d'abord qu'il est bien là :
+> ```powershell
+> & "$env:USERPROFILE\.local\bin\claude.exe" --version
+> ```
+> Si ça affiche un numéro, ajoute le dossier au PATH une bonne fois :
+> ```powershell
+> $p = [Environment]::GetEnvironmentVariable('PATH','User')
+> [Environment]::SetEnvironmentVariable('PATH', "$p;$env:USERPROFILE\.local\bin", 'User')
+> ```
+> Puis **ferme et rouvre PowerShell** (le PATH ne se met à jour que dans les nouvelles fenêtres). `claude --version` marchera alors sans le chemin complet.
 
 ---
 
@@ -105,7 +136,8 @@ Pour quitter Claude Code : tape `/exit` ou fais `Ctrl + C` deux fois.
 
 | Symptôme | Solution |
 |----------|----------|
-| `command not found: claude` (Mac/Linux) / `claude n'est pas reconnu` (Windows) | Ferme et rouvre le terminal. Si ça persiste, refais l'Étape 1. |
+| `command not found: claude` (Mac/Linux) / `claude n'est pas reconnu` (Windows) | Ferme et rouvre le terminal. Sur Windows si ça persiste, c'est le PATH : voir l'encadré ⚠️ de l'Étape 1 (Windows). Sinon refais l'Étape 1. |
+| (Windows) j'ai modifié le PATH mais `claude` n'est toujours pas reconnu | Une modif du PATH ne s'applique qu'aux **nouvelles** fenêtres PowerShell. Ferme celle-ci et rouvre-en une neuve. |
 | Erreur **401 / Authentication** | Ta clé est mal collée (espace en trop, guillemets, clé incomplète). Refais l'Étape 2 proprement. |
 | Erreur **429 / budget exceeded** | Ton budget est épuisé, préviens le formateur. |
 | Erreur **model not allowed** | Tu as demandé un modèle non autorisé (ex : Opus). Reste sur le modèle par défaut. |
