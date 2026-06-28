@@ -16,7 +16,12 @@ Ton projet doit cocher ces cases :
 - **Plusieurs couches** : une interface (front) + une logique (back) + de la **persistance** (les données survivent à un rechargement).
 - **Une UI réellement utilisable** : pas juste un script, une vraie petite app qu'on peut prendre en main.
 - **100% construit avec Claude Code** : zéro ligne écrite à la main.
-- **Au moins 2 skills** : 1 "métier" (propre à ton domaine) + 1 "transverse" (réutilisable), plus des scripts déterministes et un fichier `CLAUDE.md` de cadrage. *(On voit tout ça en détail à partir du J2, pas de panique aujourd'hui.)*
+- **Du cadrage, pas du vibe coding.** Ton projet doit montrer la méthode qu'on apprend cette semaine :
+  - un **`CLAUDE.md`** qui pose les règles à l'IA,
+  - au moins **2 skills** : 1 "métier" (propre à ton domaine) + 1 "transverse" (réutilisable),
+  - et des **scripts déterministes** : du code qui fait une tâche précise et fiable (un calcul, un parsing, une validation), que tu écris **une fois** au lieu de laisser l'IA la refaire (différemment) à chaque prompt. C'est le cœur de la méthode : tout ce qui doit être fiable et reproductible passe par un script, pas par l'IA.
+
+  *(Ces termes seront clairs à partir du J2, pas de panique au J1.)*
 
 ---
 
@@ -26,8 +31,12 @@ Prends un papier et note :
 
 1. **Le nom** du projet
 2. **Le problème** qu'il résout (1-2 phrases)
-3. **Les 3 entités principales** (ex : pour un tracker de stages → Candidature, Entreprise, Relance)
-4. **Les 5 fonctionnalités** prévues
+3. **Tes entités principales** : les "objets" que ton app manipule. Mets-en au moins 3, et plus si ton idée le demande. *(ex : pour un calculateur d'empreinte carbone → Entreprise, Source d'émission, Rapport.)*
+4. **Tes fonctionnalités clés** (vise environ 5) : des **vraies fonctionnalités qui rendent un service**, pas des briques techniques de base.
+   - ❌ trop basique : "créer un utilisateur", "se connecter", "ajouter une ligne"
+   - ✅ une vraie fonctionnalité : "permettre à une entreprise de calculer son empreinte carbone complète (véhicules, flotte, parc informatique...)"
+
+   Vise des **workflows** qui apportent de la valeur, pas des opérations CRUD isolées.
 
 Ensuite je passe voir chacun pour **valider ou réorienter** ton idée.
 
@@ -76,12 +85,12 @@ Ensuite je passe voir chacun pour **valider ou réorienter** ton idée.
 
 ## La notation
 
-Trois blocs : **50% le code, 30% la soutenance, 20% ta méthode.**
+Trois blocs : **40% le code, 30% ta méthode, 30% la soutenance.** La méthode pèse lourd, parce que c'est le vrai sujet du cours : **piloter** l'IA, pas juste générer du code.
 
 > [!info] Certains mots ne te parlent pas encore ?
 > "Skills", "scripts déterministes", "dette IA"... c'est normal au J1, tu ne connais pas encore tout. On les voit ensemble au fil de la semaine. Garde juste l'esprit en tête, la grille deviendra claire au fur et à mesure.
 
-### 50% : ton code
+### 40% : ton code
 
 On ne note **pas** "est-ce que l'IA écrit bien" (elle écrit pour tout le monde pareil). On note **ce que ton pilotage en a fait**. Avec le même outil, deux personnes rendent des projets très différents. Concrètement on regarde :
 
@@ -90,13 +99,20 @@ On ne note **pas** "est-ce que l'IA écrit bien" (elle écrit pour tout le monde
 - **Peu de "rustines"** : pas d'erreurs masquées, de délais magiques, de code mort, de copier-coller, de noms incohérents d'un fichier à l'autre. On t'apprend à repérer ces pièges dès le J1.
 - **Tu comprends ton code** : tu peux expliquer n'importe quel morceau. C'est LE critère central : si tu sais l'expliquer, tu as piloté ; si tu ne sais pas, tu as juste laissé faire.
 
+### 30% : ta méthode (workflow)
+
+C'est le cœur du cours. Comment tu as cadré l'IA, pas juste ce que tu lui as fait produire :
+
+- un **`CLAUDE.md`** qui pose les règles et les conventions à l'IA,
+- des **skills** (au moins 2) et surtout des **scripts déterministes** qui tiennent la route : tout ce qui doit être fiable passe par du code écrit une fois, pas par l'IA à chaque prompt,
+- des **commits réguliers** (pas un seul gros dépôt à la fin) qui montrent que tu as travaillé en petites étapes,
+- un **repo propre** (README, `.gitignore`, pas de secrets).
+
+*(Tout ça s'apprend à partir du J2.)*
+
 ### 30% : ta soutenance
 
 La clarté de ta démo, ta capacité à expliquer ta méthode, et le recul que tu as sur ce que tu as construit.
-
-### 20% : ta méthode (workflow)
-
-Comment tu as travaillé : un `CLAUDE.md` qui cadre l'IA, des skills et des scripts qui tiennent la route, des commits réguliers (pas un seul gros dépôt à la fin), un repo propre. *(Tout ça s'apprend à partir du J2.)*
 
 ### Les niveaux, en clair
 

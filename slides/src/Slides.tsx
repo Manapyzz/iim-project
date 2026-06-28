@@ -24,6 +24,9 @@ const ICON = {
   alert: 'wired-flat-2263-alert-hover-pinch.json',
   cogs: 'wired-flat-40-cogs-hover-mechanic.json',
   globe: 'wired-flat-735-world-globe-hover-roll.json',
+  // À télécharger pour les 2 nouvelles slides (sinon affichage vide / placeholder)
+  calendar: 'wired-flat-28-calendar-day-hover-line.json',
+  trophy: 'wired-flat-1340-trophy-hover-pinch.json',
 };
 
 // ---------- Layouts ----------
@@ -224,8 +227,13 @@ const S0: React.FC = () => (
     <Reveal delay={6}>
       <LordiconIcon file={ICON.sparkles} color={COLORS.orange} width={220} height={220} />
     </Reveal>
-    <KineticText text="Comprendre le LLM en 1h" delay={20} fontSize={84} />
-    <KineticText text="M1 IWID — IIM" delay={48} fontSize={32} color={COLORS.blue} />
+    <KineticText text="Le LLM, sous le capot." delay={20} fontSize={92} />
+    <KineticText
+      text="Avant de coder, comprendre vraiment."
+      delay={48}
+      fontSize={32}
+      color={COLORS.blue}
+    />
   </Centered>
 );
 
@@ -273,7 +281,7 @@ const S1: React.FC = () => {
   );
 };
 
-// S2 — Bloc B : context window — gros chiffre 200 000
+// S2 — Bloc B : context window — gros chiffre 200 000 (Sonnet 4.6)
 const S2: React.FC = () => (
   <AbsoluteFill
     style={{
@@ -284,7 +292,20 @@ const S2: React.FC = () => (
       padding: '0 150px',
     }}
   >
-    <BigStat value="200 000" unit="Tokens max" delay={10} />
+    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4}}>
+      <BigStat value="200 000" unit="Tokens max — Sonnet 4.6" delay={10} />
+      <span
+        style={{
+          fontFamily: FONT_FAMILY,
+          fontSize: 22,
+          color: COLORS.blue,
+          marginTop: 18,
+          opacity: 0.85,
+        }}
+      >
+        (Opus 4.8 et Haiku 4.5 : ~200k aussi · Gemini 2.5 Pro : 2M)
+      </span>
+    </div>
     <div style={{display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 620}}>
       <KineticText text="LE CONTEXTE" fontSize={30} color={COLORS.orange} align="left" />
       <KineticText
@@ -428,8 +449,146 @@ const S8: React.FC = () => (
   />
 );
 
-// S9 — Closing
-const S9: React.FC = () => (
+// S9 — Programme de la semaine (4 jours)
+const S9: React.FC = () => {
+  const frame = useCurrentFrame();
+  const days = [
+    {label: 'J1 — Lundi', detail: 'Vibe coding. Le mur.', color: COLORS.orange},
+    {label: 'J2 — Mardi', detail: 'Cadrage. Skills. Scripts.', color: COLORS.text},
+    {label: 'J3 — Mercredi', detail: 'Workflows avancés. MCP.', color: COLORS.text},
+    {label: 'J4 — Jeudi', detail: 'Audit. Soutenance.', color: COLORS.blue},
+  ];
+  return (
+    <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 28}}>
+      <Reveal delay={6}>
+        <LordiconIcon file={ICON.calendar} color={COLORS.orange} width={140} height={140} />
+      </Reveal>
+      <KineticText text="PROGRAMME — 4 JOURS" delay={20} fontSize={30} color={COLORS.orange} />
+      <div style={{display: 'flex', flexDirection: 'column', gap: 14, marginTop: 10}}>
+        {days.map((d, i) => {
+          const delay = 38 + i * 12;
+          const o = interpolate(frame, [delay, delay + 12], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          const x = interpolate(frame, [delay, delay + 12], [-30, 0], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          return (
+            <div
+              key={i}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 28,
+                opacity: o,
+                transform: `translateX(${x}px)`,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontWeight: 800,
+                  fontSize: 36,
+                  color: d.color,
+                  minWidth: 280,
+                }}
+              >
+                {d.label}
+              </span>
+              <span
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontWeight: 500,
+                  fontSize: 32,
+                  color: COLORS.text,
+                  opacity: 0.85,
+                }}
+              >
+                {d.detail}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+// S10 — Rendu final : soutenance + repo
+const S10: React.FC = () => {
+  const frame = useCurrentFrame();
+  const items = [
+    {value: '8 min', label: 'Soutenance individuelle', delay: 36},
+    {value: '1 repo', label: 'Code + cadrage + skills', delay: 52},
+    {value: '15 j', label: 'Délai notation', delay: 68},
+  ];
+  return (
+    <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 32}}>
+      <Reveal delay={6}>
+        <LordiconIcon file={ICON.trophy} color={COLORS.orange} width={170} height={170} />
+      </Reveal>
+      <KineticText text="LE RENDU FINAL" delay={20} fontSize={30} color={COLORS.orange} />
+      <KineticText text="Jeudi après-midi." delay={32} fontSize={56} />
+      <div style={{display: 'flex', gap: 30, marginTop: 14}}>
+        {items.map((it, i) => {
+          const o = interpolate(frame, [it.delay, it.delay + 12], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          const y = interpolate(frame, [it.delay, it.delay + 12], [20, 0], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          return (
+            <div
+              key={i}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                padding: '16px 30px',
+                border: `2px solid ${COLORS.orange}33`,
+                borderRadius: 14,
+                background: `${COLORS.orange}08`,
+                opacity: o,
+                transform: `translateY(${y}px)`,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontWeight: 900,
+                  fontSize: 56,
+                  color: COLORS.orange,
+                  lineHeight: 1,
+                }}
+              >
+                {it.value}
+              </span>
+              <span
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontWeight: 600,
+                  fontSize: 22,
+                  color: COLORS.text,
+                  marginTop: 8,
+                  textAlign: 'center',
+                }}
+              >
+                {it.label}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+// S11 — Closing
+const S11: React.FC = () => (
   <CenterHero
     file={ICON.bulb}
     color={COLORS.orange}
@@ -445,7 +604,7 @@ const SlideFade: React.FC<{children: React.ReactNode}> = ({children}) => {
   return <AbsoluteFill style={{opacity: o}}>{children}</AbsoluteFill>;
 };
 
-export const SLIDE_COMPONENTS = [S0, S1, S2, S3, S4, S5, S6, S7, S8, S9];
+export const SLIDE_COMPONENTS = [S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11];
 export const SLIDE_COUNT = SLIDE_COMPONENTS.length;
 export const TOTAL = SLIDE * SLIDE_COUNT;
 
