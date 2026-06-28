@@ -18,3 +18,8 @@ attachments/
 # Divers
 *.log
 *.tmp
+
+# Notes formateur (privees - NE PAS pusher sur le repo public)
+jour-*/notes-*.md
+jour-*/schema-*.md
+jour-*/script-*.md
