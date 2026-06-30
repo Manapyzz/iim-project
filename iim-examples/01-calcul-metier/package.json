@@ -1,0 +1,17 @@
+{
+  "name": "demo-01-calcul-metier",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pattern Calcul Metier — extraire le calcul deterministe hors LLM",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4",
+    "@types/node": "^22.9.0"
+  }
+}

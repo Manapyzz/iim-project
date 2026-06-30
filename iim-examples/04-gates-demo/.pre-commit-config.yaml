@@ -1,0 +1,24 @@
+# =====================================================================
+# Pre-commit hook qui bloque les commits contenant de la dette IA.
+#
+# Installation :
+#   pip install pre-commit
+#   pre-commit install
+#
+# Test :
+#   pre-commit run --all-files
+#
+# A partir de la, tout `git commit` qui contient de la dette
+# (TODO, try/catch silencieux, god file, magic number business) est
+# REFUSE par le hook. La dette ne peut plus arriver dans le repo.
+# =====================================================================
+
+repos:
+  - repo: local
+    hooks:
+      - id: lint-dette-ia
+        name: Linter de dette IA (scan deterministe)
+        entry: bash scripts/lint-dette.sh src
+        language: system
+        types: [ts]
+        pass_filenames: false
