@@ -74,22 +74,19 @@ Optionnel pour le niveau 3 :
 - Premier mur identifié : vous avez vu votre code dérailler
 
 ### 🚩 J2 (mardi 30/06) fin
-- `CLAUDE.md` ou `PROJECT_RULES.md` posé
-- Au moins 1 skill documenté
-- `DECISIONS.md` tenu à jour
-- Au moins 1 `.plan.md` exécuté
+- `CLAUDE.md` posé à la racine de votre projet
+- Au moins 1 script déterministe extrait + tests qui prouvent qu'il marche
+- Un pre-commit hook qui empêche la dette de revenir
 
 ### 🚩 J3 (mercredi 01/07) fin
 - Au moins 2 fonctionnalités refactorées avec cadrage
-- Au moins 1 gate déterministe
-- Niveau 3 : MCP ou tool externe intégré
-- Mémoire externe utilisée (CLAUDE.md, MEMORY.md ou journal)
-- Audit dette technique réalisé
+- Au moins 1 gate déterministe en place
+- (Niveau 3) Au moins 1 skill bien structuré OU un MCP / outil externe intégré
 
 ### 🚩 J4 (jeudi 02/07) midi
-- Tests basiques présents
-- README propre
-- Repo GitHub partagé avec Alex (collaborateur) avant 12h30
+- README propre (à quoi ça sert, comment lancer)
+- Repo GitHub partagé avec **Manapyzz** (collaborateur) avant 12h30
+- App fonctionnelle et démontrable
 
 ---
 
@@ -109,13 +106,15 @@ Optionnel pour le niveau 3 :
 
 ---
 
-## Notation — décomposition
+## Notation — par niveaux, pas par pourcentages
 
-| Composante | % | Évalué |
-|---|---|---|
-| Présentation orale + Q&A | 30% | En direct pendant la soutenance |
-| Code, cadrage, skills | 50% | Analyse de votre repo après la formation |
-| Méthode / workflow Git / journal décisions | 20% | Analyse des commits et plans après la formation |
+Pas de calcul de pourcentages. **3 niveaux d'exigence** (cf. `projet/projet-individuel.md` pour le détail) — plus tu coches de choses dans un niveau, plus tu y montes :
+
+- **Autour de 12** : l'app tourne, persistance OK, `CLAUDE.md` posé.
+- **14-16** : code rangé, scripts déterministes en place, cas limites gérés, commits propres, soutenance claire.
+- **18-20** : méthode exemplaire (cadrage de bout en bout), garde-fous, projet abouti et ambitieux, soutenance limpide où vous expliquez n'importe quel morceau de code.
+
+> **Le critère qui fait vraiment la différence** : vous comprenez votre code. Si vous pouvez expliquer n'importe quel bout en soutenance, vous avez piloté l'IA. Sinon, vous l'avez juste laissée faire.
 
 → Délai de rendu des notes : 15 jours après fin de formation (≈ 17 juillet).
 
