@@ -193,10 +193,14 @@ Ces 7 règles s'appliquent à TOUT projet, pas juste celui-ci. Claude les conna�
 
 ## Quand le mettre à jour ?
 
-- À chaque nouvelle entité majeure ajoutée
-- À chaque nouvelle règle métier critique
-- À chaque nouveau script déterministe créé (l'ajouter à la liste pour qu'il soit appelé)
-- Quand tu remarques que Claude fait toujours la même erreur → c'est qu'il manque une règle ici
+CLAUDE.md est **injecté à chaque session** : tout ce que tu mets ici, Claude le relit en permanence. Garde-le concis et garde-le pour ce qui est VRAIMENT transverse. Le détail va ailleurs.
+
+- **Quand tu remarques que Claude fait toujours la même erreur** → ajoute une règle qui l'empêche (c'est la mise à jour la plus rentable)
+- **Quand ta stack change** (framework, DB, libs majeures) → mets à jour pour que Claude ne propose plus l'ancien
+- **Quand tu prends une décision d'archi structurante** → écris un **ADR** (Architecture Decision Record) dans `docs/adr/` et linke depuis ici. Ne recopie pas l'ADR dans CLAUDE.md.
+- **Quand tu regroupes des scripts en SKILL** → mentionne le skill ici (1 ligne). Le détail des scripts vit dans `skills/<nom>/SKILL.md`, pas ici — sinon CLAUDE.md devient un fourre-tout.
+
+> 🚫 **Ce qui ne va PAS dans CLAUDE.md** : la liste exhaustive de tes entités, de tes règles métier détaillées, ou de chaque script créé. Ça gonfle inutilement le contexte injecté à chaque message. Mets-les dans des fichiers dédiés (`PROJECT_RULES.md`, `docs/adr/`, `skills/`) et pointe vers eux depuis CLAUDE.md.
 
 ## Erreurs fréquentes
 
