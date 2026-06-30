@@ -198,7 +198,7 @@ Ces 7 règles s'appliquent à TOUT projet, pas juste celui-ci. Claude les conna�
 - À chaque nouveau script déterministe créé (l'ajouter à la liste pour qu'il soit appelé)
 - Quand tu remarques que Claude fait toujours la même erreur → c'est qu'il manque une règle ici
 
-## Erreurs fréquentes des étudiants
+## Erreurs fréquentes
 
 1. **Trop long** : tu fais un CLAUDE.md de 800 lignes, Claude lit moins bien la fin
 2. **Trop générique** : "respecte les bonnes pratiques" → inutile. Il faut du SPÉCIFIQUE à TON projet.
