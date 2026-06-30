@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le mur de la dette IA</title>
+<style>
+  :root {
+    /* Theme sombre : graphite froid (pas du noir pur), accent teal,
+       rampe de gravite chaude calibree. Meme identite instrument/registre. */
+    --paper: #15171C;
+    --card: #1C2027;
+    --ink: #E7E9ED;
+    --ink-2: #969DA9;
+    --ink-3: #646B77;
+    --line: #282D36;
+    --line-2: #39404B;
+    --crit: #EC5B52;
+    --maj: #E0913F;
+    --min: #D2B255;
+    --accent: #2FB6A6;
+    --accent-soft: rgba(47, 182, 166, 0.14);
+    --crit-soft: rgba(236, 91, 82, 0.16);
+    --code-bg: #12141A;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Roboto Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+  .wrap { max-width: 1440px; margin: 0 auto; padding: 34px 40px 90px; }
+  @media (max-width: 700px) { .wrap { padding: 20px 18px 60px; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* En-tete : rapport */
+  header { border-bottom: 1px solid var(--line); padding-bottom: 22px; margin-bottom: 24px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent); font-weight: 600;
+  }
+  h1 {
+    font-size: clamp(30px, 4.2vw, 46px); line-height: 1.02; letter-spacing: -0.03em;
+    font-weight: 800; margin: 10px 0 10px;
+  }
+  .sub { color: var(--ink-2); font-size: 15px; max-width: 72ch; line-height: 1.55; }
+
+  /* Bandeau de synthese facon ligne de bilan */
+  .summary {
+    display: flex; flex-wrap: wrap; background: var(--card);
+    border: 1px solid var(--line); border-radius: var(--radius);
+    margin-bottom: 22px; overflow: hidden;
+  }
+  .metric {
+    flex: 1; min-width: 132px; padding: 16px 22px;
+    border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 7px;
+  }
+  .metric:last-child { border-right: none; }
+  .mfig {
+    font-family: var(--mono); font-size: 34px; font-weight: 700; line-height: 1;
+    letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+  }
+  .mlab {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--ink-3); display: flex; align-items: center; gap: 7px;
+  }
+  .metric.crit .mfig { color: var(--crit); } .metric.maj .mfig { color: var(--maj); } .metric.min .mfig { color: var(--min); }
+  .metric.crit .mlab::before, .metric.maj .mlab::before, .metric.min .mlab::before {
+    content: ""; width: 9px; height: 9px; border-radius: 2px; display: inline-block;
+  }
+  .metric.crit .mlab::before { background: var(--crit); }
+  .metric.maj .mlab::before { background: var(--maj); }
+  .metric.min .mlab::before { background: var(--min); }
+
+  /* Loader */
+  .loader {
+    background: var(--card); border: 1.5px dashed var(--line-2); border-radius: var(--radius);
+    padding: 38px; text-align: center; transition: border-color .15s, background .15s;
+  }
+  .loader.drag { border-color: var(--accent); background: var(--accent-soft); }
+  #pickBtn {
+    font-family: var(--sans); font-size: 15px; font-weight: 600; padding: 11px 24px;
+    border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: var(--paper); cursor: pointer;
+  }
+  #pickBtn:hover { filter: brightness(1.08); }
+  .hint { color: var(--ink-2); font-size: 13px; margin-top: 12px; line-height: 1.5; }
+  .hint code { font-family: var(--mono); font-size: 12px; background: var(--paper); padding: 2px 6px; border-radius: 4px; }
+
+  /* Onglets (segmented control, colle en haut) */
+  .tabs {
+    display: inline-flex; gap: 4px; padding: 4px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 10px; margin-bottom: 22px;
+    position: sticky; top: 12px; z-index: 5;
+  }
+  .tab {
+    font-family: var(--sans); font-size: 14px; font-weight: 600; padding: 8px 18px;
+    border-radius: 7px; border: none; background: transparent; color: var(--ink-2);
+    cursor: pointer; transition: color .12s, background .12s;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { background: var(--accent); color: var(--paper); }
+
+  h2 {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--ink-2); font-weight: 600; margin: 0 0 14px;
+  }
+
+  /* En-tete du classement + bouton de confidentialite des noms */
+  .lb-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .lb-head h2 { margin: 0; }
+  .namebtn {
+    display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2);
+    background: var(--card); border: 1px solid var(--line); border-radius: 7px;
+    padding: 6px 11px; cursor: pointer; transition: color .12s, border-color .12s; white-space: nowrap;
+  }
+  .namebtn:hover { color: var(--ink); border-color: var(--line-2); }
+  .namebtn.revealed { color: var(--accent); border-color: var(--accent); }
+  .namebtn svg { width: 15px; height: 15px; flex: none; }
+
+  /* Flou de confidentialite : on floute UNIQUEMENT le nom, jamais les chiffres.
+     Classement = tout .who (pas de score dedans) ; detail = le span .pname. */
+  #leaderboard .who, .pname { transition: filter .25s ease; }
+  .pname { display: inline-block; }
+  body.hide-names #leaderboard .who,
+  body.hide-names .pname { filter: blur(6px); }
+
+  .legend {
+    display: flex; gap: 16px; margin: 0 0 16px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .dot.crit { background: var(--crit); } .dot.maj { background: var(--maj); } .dot.min { background: var(--min); }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 24px; }
+  @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
+
+  /* Lignes de classement (registre) */
+  .row {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 14px 18px; margin-bottom: 8px; cursor: pointer; transition: border-color .12s, box-shadow .12s;
+  }
+  .row:hover { border-color: var(--line-2); }
+  .row.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .row.dead { opacity: .55; cursor: default; background: transparent; border-style: dashed; }
+  .rank {
+    font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--ink-3);
+    width: 26px; text-align: right; flex: none; font-variant-numeric: tabular-nums;
+  }
+  .who { flex: 1; min-width: 0; font-size: 17px; font-weight: 650; line-height: 1.2; }
+  .who small {
+    display: block; font-family: var(--mono); font-size: 11px; color: var(--ink-3);
+    font-weight: 400; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .count {
+    flex: none; width: 86px; text-align: right; font-family: var(--mono);
+    font-size: 30px; font-weight: 700; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums;
+  }
+  .count .score-cap {
+    display: block; font-size: 9px; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px;
+  }
+  .count small { display: block; font-size: 11px; font-weight: 400; color: var(--ink-3); margin-top: 5px; white-space: nowrap; }
+
+  /* Signature : jauge de gravite calibree (segments sur une echelle graduee) */
+  .barwrap {
+    flex: none; width: 140px; height: 12px; background: var(--paper);
+    border: 1px solid var(--line); border-radius: 3px; overflow: hidden; position: relative;
+  }
+  .barwrap::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(90deg, transparent 0 calc(20% - 1px), var(--line-2) calc(20% - 1px) 20%);
+    opacity: .7;
+  }
+  .barfill { position: relative; height: 100%; display: flex; }
+  .bar { height: 100%; }
+  .bar.crit { background: var(--crit); } .bar.maj { background: var(--maj); } .bar.min { background: var(--min); }
+  .bar + .bar { box-shadow: inset 1px 0 0 var(--card); }
+  .badge-dead { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-left: auto; }
+
+  /* Detail */
+  .detail {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px; position: sticky; top: 66px; max-height: calc(100vh - 86px); overflow: auto;
+  }
+  .detail .empty { color: var(--ink-3); font-size: 15px; }
+  .detail h3 { font-size: 22px; font-weight: 750; letter-spacing: -0.02em; margin: 0 0 3px; }
+  .detail .repo { font-family: var(--mono); color: var(--ink-3); font-size: 12px; margin-bottom: 12px; word-break: break-all; }
+  .deep-badge {
+    display: inline-block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.03em;
+    padding: 4px 10px; border-radius: 6px; margin-bottom: 16px;
+  }
+  .deep-badge.on { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
+  .deep-badge.off { background: var(--paper); color: var(--ink-3); border: 1px solid var(--line); }
+
+  .sev-group { margin-bottom: 14px; }
+  .sev-head {
+    display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px;
+    font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 8px 0 6px; border-bottom: 1px solid var(--line);
+  }
+  .sev-head .poids { color: var(--ink-3); font-weight: 500; letter-spacing: 0.04em; }
+  .sev-head .stot { margin-left: auto; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .sev-head.crit { color: var(--crit); } .sev-head.maj { color: var(--maj); } .sev-head.min { color: var(--min); }
+
+  .cat { border-bottom: 1px solid var(--line); }
+  .cat:last-child { border-bottom: none; }
+  .cat-head { display: flex; align-items: center; gap: 11px; padding: 9px 2px; }
+  .cat-head.clickable { cursor: pointer; }
+  .cat-head.clickable:hover .name { color: var(--accent); }
+  .cat .emo { font-size: 17px; width: 22px; text-align: center; }
+  .cat .name { flex: 1; font-size: 14px; color: var(--ink); transition: color .12s; }
+  .cat .chevron { color: var(--ink-3); font-size: 10px; width: 14px; transition: transform .15s; }
+  .cat.open .chevron { transform: rotate(90deg); }
+  .cat .n {
+    font-family: var(--mono); font-size: 16px; font-weight: 700; min-width: 34px;
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  .cat .n.zero { color: var(--ink-3); font-weight: 400; }
+  .cat-body { display: none; padding: 2px 0 12px; }
+  .cat.open .cat-body { display: block; }
+
+  /* Vue code (blob clair facon GitHub) */
+  .finding { margin-bottom: 12px; }
+  .finding .fhead {
+    font-family: var(--mono); font-size: 12px; background: var(--paper);
+    border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0;
+    padding: 6px 11px; display: flex; justify-content: space-between; gap: 10px;
+  }
+  .finding .fhead .path { color: var(--accent); font-weight: 600; word-break: break-all; }
+  .finding .fhead .det { color: var(--ink-3); white-space: nowrap; }
+  .code { border: 1px solid var(--line); border-radius: 0 0 6px 6px; overflow-x: auto; background: var(--code-bg); }
+  .cline { display: flex; font-family: var(--mono); font-size: 12.5px; line-height: 1.5; white-space: pre; }
+  .cline .ln {
+    color: var(--ink-3); text-align: right; padding: 0 12px; min-width: 46px;
+    user-select: none; border-right: 1px solid var(--line);
+  }
+  .cline .src { padding: 0 14px; flex: 1; color: var(--ink); }
+  .cline.target { background: var(--crit-soft); }
+  .cline.target .ln { color: var(--crit); font-weight: 700; border-right: 2px solid var(--crit); }
+  .more { color: var(--ink-3); font-size: 12px; padding: 6px 2px; }
+
+  /* Vue par type d'erreur */
+  .trow {
+    display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: 18px;
+    background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--line-2);
+    border-radius: var(--radius); padding: 16px 20px; margin-bottom: 8px;
+  }
+  .trow.crit { border-left-color: var(--crit); } .trow.maj { border-left-color: var(--maj); } .trow.min { border-left-color: var(--min); }
+  .trow.dim { opacity: .5; }
+  .trow .temo { font-size: 22px; text-align: center; }
+  .trow .tname { font-size: 16px; font-weight: 650; }
+  .trow .tdesc { font-size: 13.5px; color: var(--ink-2); margin-top: 3px; line-height: 1.45; max-width: 78ch; }
+  .trow .tnums { text-align: right; white-space: nowrap; min-width: 122px; }
+  .trow .tcount { font-family: var(--mono); font-size: 28px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .trow.crit .tcount { color: var(--crit); } .trow.maj .tcount { color: var(--maj); } .trow.min .tcount { color: var(--min); }
+  .trow .trepos { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 6px; }
+  .trow .treposbar {
+    width: 120px; height: 5px; background: var(--paper); border: 1px solid var(--line);
+    border-radius: 3px; margin-top: 7px; overflow: hidden; margin-left: auto;
+  }
+  .trow .treposfill { height: 100%; background: var(--ink-3); }
+  .trow.crit .treposfill { background: var(--crit); } .trow.maj .treposfill { background: var(--maj); } .trow.min .treposfill { background: var(--min); }
+
+  /* Delta (evolution depuis la derniere analyse) */
+  .delta { font-family: var(--mono); font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .delta.down { color: var(--accent); }   /* moins de soucis = mieux */
+  .delta.up { color: var(--crit); }        /* plus de soucis = pire */
+  .delta.flat { color: var(--ink-3); }
+
+  /* Vue Evolution */
+  .erow {
+    display: grid; grid-template-columns: 1fr 160px auto; align-items: center; gap: 20px;
+    padding: 16px 18px; background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); margin-bottom: 10px;
+  }
+  .erow .ename { font-size: 17px; font-weight: 650; }
+  .erow .esub { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; margin-top: 4px; }
+  .erow .spark { width: 160px; height: 36px; display: block; }
+  .erow .ecur { text-align: right; min-width: 96px; }
+  .erow .ecur .escore { font-family: var(--mono); font-size: 26px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .erow .ecur .escap { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+  .erow .ecur .edelta { margin-top: 5px; }
+  .evolution-hint { color: var(--ink-2); font-size: 13.5px; margin: -4px 0 16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">Analyse statique &middot; Linter deterministe</div>
+  <h1>Le mur de la dette IA</h1>
+  <div class="sub">Anti-patterns generes en vibe coding, comptes sans jamais executer le code (zero LLM). Formation IIM, juin 2026.</div>
+</header>
+
+<div class="loader" id="loader">
+  <button id="pickBtn">Charger rapport.json</button>
+  <input type="file" id="fileInput" accept=".json,application/json" style="display:none">
+  <div class="hint">ou glisse le fichier <strong>rapport.json</strong> ici. Genere avec :
+    <code>python scripts/lint_dette_ia.py --all ./repos &gt; rapport.json</code></div>
+</div>
+
+<div id="content" style="display:none">
+  <div class="summary">
+    <div class="metric"><span class="mfig" id="statTotal">0</span><span class="mlab">soucis</span></div>
+    <div class="metric"><span class="mfig" id="statRepos">0</span><span class="mlab">projets</span></div>
+    <div class="metric crit"><span class="mfig" id="statCrit">0</span><span class="mlab">critiques &middot; x5</span></div>
+    <div class="metric maj"><span class="mfig" id="statMaj">0</span><span class="mlab">majeurs &middot; x3</span></div>
+    <div class="metric min"><span class="mfig" id="statMin">0</span><span class="mlab">mineurs &middot; x1</span></div>
+    <div class="metric"><span class="mfig" id="statLoc">0</span><span class="mlab">lignes de code</span></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-view="classement">Classement par projet</button>
+    <button class="tab" data-view="type">Par type d'erreur</button>
+    <button class="tab" data-view="evolution" id="tabEvolution" style="display:none">&Eacute;volution</button>
+  </div>
+
+  <div id="viewClassement">
+    <div class="layout">
+      <div>
+        <div class="lb-head">
+          <h2>Classement par score de gravite</h2>
+          <button id="nameToggle" class="namebtn" type="button"></button>
+        </div>
+        <div class="legend">
+          <span><i class="dot crit"></i> Critique</span>
+          <span><i class="dot maj"></i> Majeur</span>
+          <span><i class="dot min"></i> Mineur</span>
+        </div>
+        <div id="leaderboard"></div>
+      </div>
+      <div>
+        <h2>Detail du projet</h2>
+        <div class="detail" id="detail"><div class="empty">Selectionne un projet dans le classement pour voir le detail.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="viewType" style="display:none">
+    <h2>Par type d'erreur &middot; trie par projets touches</h2>
+    <div id="typeList"></div>
+  </div>
+
+  <div id="viewEvolution" style="display:none">
+    <h2>&Eacute;volution &middot; score et soucis au fil des analyses</h2>
+    <div class="evolution-hint">Chaque analyse lancee avec <code>--history</code> ajoute un point. Le delta compare a l'analyse precedente : <span class="delta down">&#9660; en baisse = mieux</span>, <span class="delta up">&#9650; en hausse = plus de dette</span>.</div>
+    <div id="evolutionList"></div>
+  </div>
+</div>
+</div>
+
+<script>
+"use strict";
+
+// Libelles + emoji + gravite par regle (bareme aligne sur lint_dette_ia.py)
+const RULES = {
+  "secret-en-clair":         { emo: "🔑", label: "Secret en clair", sev: "crit" },
+  "erreur-masquee":          { emo: "🙈", label: "Erreur masquee (catch vide)", sev: "crit" },
+  "pas-de-cadre":            { emo: "🚧", label: "Pas de cadre (aucun CLAUDE.md)", sev: "crit" },
+  "boilerplate-non-modifie": { emo: "📦", label: "Boilerplate non modifie (scaffold brut)", sev: "crit" },
+  "xss-innerhtml":           { emo: "💉", label: "XSS (dangerouslySetInnerHTML / innerHTML)", sev: "crit" },
+  "eval-dangereux":          { emo: "☢️", label: "eval / new Function", sev: "crit" },
+  "injection-sql":           { emo: "🗄️", label: "Injection SQL (requete interpolee)", sev: "crit" },
+  "cacher-la-dette":         { emo: "🚫", label: "Suppression de check (ts-ignore...)", sev: "maj" },
+  "settimeout-magique":      { emo: "⏱️", label: "setTimeout magique", sev: "maj" },
+  "god-file":                { emo: "📜", label: "God file (fichier trop long)", sev: "maj" },
+  "backward-compat":         { emo: "🧟", label: "Code legacy / backward compat", sev: "maj" },
+  "donnees-mockees":         { emo: "🎭", label: "Donnees mockees (faux backend)", sev: "maj" },
+  "aucun-test":              { emo: "🧪", label: "Aucun test", sev: "maj" },
+  "crypto-faible":           { emo: "🔓", label: "Crypto faible (md5 / sha1)", sev: "maj" },
+  "random-non-securise":     { emo: "🎲", label: "Math.random pour un secret / id", sev: "maj" },
+  "react-hook-sans-deps":    { emo: "🪝", label: "Hook React sans tableau de deps", sev: "maj" },
+  "react-key-index":         { emo: "🔑", label: "key={index} sur une liste", sev: "maj" },
+  "catch-log-seulement":     { emo: "🤫", label: "Catch qui ne fait que logger", sev: "maj" },
+  "catch-retour-silencieux": { emo: "🙊", label: "Catch qui retourne une valeur par defaut", sev: "maj" },
+  "type-any":                { emo: "🌀", label: "Type any (echappatoire TS)", sev: "maj" },
+  "secrets-gitleaks":        { emo: "🔐", label: "Secret detecte (gitleaks / trivy)", sev: "crit", deep: true },
+  "type-errors":             { emo: "🧩", label: "Erreur de typage (tsc)", sev: "maj", deep: true },
+  "duplication":             { emo: "👯", label: "Code duplique (jscpd)", sev: "maj", deep: true },
+  "fonction-trop-longue":    { emo: "📐", label: "Fonction trop longue (AST)", sev: "maj", deep: true },
+  "nommage-paresseux":       { emo: "🏷️", label: "Nommage paresseux", sev: "min" },
+  "todo-orphelin":           { emo: "📌", label: "TODO orphelin", sev: "min" },
+  "logs-oublies":            { emo: "🪵", label: "Logs / debug oublies", sev: "min" },
+  "url-http-non-securisee":  { emo: "🌐", label: "URL http:// en clair", sev: "min" },
+  "code-commente":           { emo: "💬", label: "Code commente (mort)", sev: "min" },
+  "var-legacy":              { emo: "📦", label: "var au lieu de let / const", sev: "min" },
+  "egalite-non-stricte":     { emo: "⚖️", label: "Egalite non stricte (== / !=)", sev: "min" },
+  "imbrication-profonde":    { emo: "🪆", label: "Imbrication trop profonde (AST)", sev: "min", deep: true },
+  "import-inutilise":        { emo: "🗑️", label: "Import inutilise (AST)", sev: "min", deep: true },
+};
+
+// Les 3 niveaux de gravite, du plus grave au moins grave
+const SEVERITIES = [
+  { key: "crit", api: "critique", label: "Critique", poids: "x5" },
+  { key: "maj",  api: "majeur",   label: "Majeur",   poids: "x3" },
+  { key: "min",  api: "mineur",   label: "Mineur",   poids: "x1" },
+];
+
+// Explication simple et precise de chaque regle (vue "par type d'erreur")
+const DESC = {
+  "secret-en-clair": "Une cle API ou un mot de passe ecrit en dur dans le code : fuite de securite directe.",
+  "erreur-masquee": "Un bloc catch vide avale l'erreur : le bug devient invisible et impossible a diagnostiquer.",
+  "pas-de-cadre": "Aucun CLAUDE.md / PROJECT_RULES.md : l'IA code sans regles et derive vers la mediane d'Internet.",
+  "boilerplate-non-modifie": "La page par defaut de create-next-app n'a pas ete touchee : le projet n'a pas vraiment demarre.",
+  "xss-innerhtml": "Insertion de HTML brut (innerHTML / dangerouslySetInnerHTML) : porte ouverte aux injections XSS.",
+  "eval-dangereux": "eval() / new Function() execute du texte comme du code : faille d'injection majeure.",
+  "injection-sql": "Une requete SQL construite en collant des variables : injection SQL possible.",
+  "cacher-la-dette": "eslint-disable / @ts-ignore : on fait taire l'outil au lieu de corriger le vrai probleme.",
+  "settimeout-magique": "Un delai arbitraire (setTimeout 300ms) pour regler un timing : casse sur une machine plus lente.",
+  "god-file": "Un fichier trop long (>300 lignes) : illisible, melange trop de responsabilites.",
+  "backward-compat": "Du code marque legacy / deprecated / _old : un chemin mort qui double la surface de bugs.",
+  "donnees-mockees": "Les donnees viennent d'un faux fichier mock : il n'y a pas de vrai backend derriere.",
+  "aucun-test": "Aucun test automatise : rien ne verifie que le code marche, ni qu'il marchera apres modification.",
+  "crypto-faible": "Usage de md5 / sha1 : algorithmes casses, ils ne protegent plus rien.",
+  "random-non-securise": "Math.random() pour generer un secret ou un token : previsible, donc cassable.",
+  "react-hook-sans-deps": "Un useEffect sans tableau de dependances : l'effet se rejoue a chaque rendu (bug ou boucle).",
+  "react-key-index": "key={index} dans une liste React : casse l'affichage quand la liste change d'ordre.",
+  "catch-log-seulement": "Un catch qui se contente d'un console.log : l'erreur est avalee, le programme continue fausse.",
+  "catch-retour-silencieux": "Un catch qui retourne null/[] : masque l'erreur et propage des donnees vides en silence.",
+  "type-any": "Le type any desactive la verification TypeScript : on perd tout l'interet du typage.",
+  "nommage-paresseux": "Un fichier fourre-tout (utils, helpers, config) : on ne sait pas ce qu'il contient sans l'ouvrir.",
+  "todo-orphelin": "Un // TODO laisse dans le code : la dette est repoussee a plus tard, c'est-a-dire jamais.",
+  "logs-oublies": "Des console.log / debugger oublies : du bruit laisse dans le code de production.",
+  "url-http-non-securisee": "Une URL en http:// (pas https) : trafic en clair, interceptable.",
+  "code-commente": "Du code mis en commentaire au lieu d'etre supprime : du code mort qui pollue et trompe.",
+  "var-legacy": "var au lieu de let/const : portee de variable piegeuse, source de bugs.",
+  "egalite-non-stricte": "== au lieu de === : compare avec conversion implicite, comportements surprenants.",
+  "secrets-gitleaks": "Un secret detecte par analyse d'entropie (gitleaks/trivy) : cle ou token probablement reel expose.",
+  "type-errors": "Une erreur de typage detectee par tsc : le code ne respecte pas ses propres types, bug latent.",
+  "duplication": "Des blocs copies-colles (jscpd) : toute correction devra etre refaite a plusieurs endroits.",
+  "fonction-trop-longue": "Une fonction de plus de 50 lignes : fait trop de choses, dure a lire et a tester.",
+  "imbrication-profonde": "Du code imbrique sur 5+ niveaux : logique difficile a suivre, bugs faciles a cacher.",
+  "import-inutilise": "Un import jamais utilise : du bruit, signe de code genere sans relecture.",
+};
+
+let DATA = [];
+let HISTORY = [];  // instantanes horodates (historique.json), optionnel
+
+function normalize(json) {
+  // Accepte soit un tableau (--all), soit un objet unique (un repo).
+  return Array.isArray(json) ? json : [json];
+}
+
+// Entrees d'historique d'un repo, triees par date croissante
+function historyFor(repo) {
+  return HISTORY.filter(h => h.repo === repo).sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+}
+
+// Badge de delta : pour les soucis, baisser = mieux (vert), monter = pire (rouge)
+function deltaBadge(prev, curr) {
+  if (prev == null) return "";
+  const d = curr - prev;
+  if (d === 0) return `<span class="delta flat">= depuis la derniere analyse</span>`;
+  const cls = d < 0 ? "down" : "up";
+  const arrow = d < 0 ? "▼" : "▲";
+  return `<span class="delta ${cls}">${arrow} ${d > 0 ? "+" : ""}${d} depuis la derniere</span>`;
+}
+
+// Mini-courbe SVG des valeurs (score au fil des analyses)
+function sparkline(values, w = 160, h = 36) {
+  if (!values.length) return "";
+  const pad = 4, max = Math.max(...values, 1), min = Math.min(...values, 0);
+  const span = (max - min) || 1;
+  const step = values.length > 1 ? (w - 2 * pad) / (values.length - 1) : 0;
+  const pts = values.map((v, i) => {
+    const x = pad + i * step;
+    const y = h - pad - ((v - min) / span) * (h - 2 * pad);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const last = pts[pts.length - 1].split(",");
+  const trend = values[values.length - 1] <= values[0] ? "var(--accent)" : "var(--crit)";
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <polyline fill="none" stroke="${trend}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
+      points="${pts.join(" ")}"/>
+    <circle cx="${last[0]}" cy="${last[1]}" r="3" fill="${trend}"/>
+  </svg>`;
+}
+
+function sev(r, key) { return (r.parSeverite && r.parSeverite[key]) || 0; }
+
+function render() {
+  const valid = DATA.filter(r => !r.nonAnalysable);
+  const grandTotal = valid.reduce((a, r) => a + (r.total || 0), 0);
+  const maxScore = valid.reduce((m, r) => Math.max(m, r.score || 0), 0);
+  const sum = k => valid.reduce((a, r) => a + sev(r, k), 0);
+
+  const totalLoc = valid.reduce((a, r) => a + (r.lignesDeCode || 0), 0);
+  document.getElementById("statTotal").textContent = grandTotal;
+  document.getElementById("statRepos").textContent = DATA.length;
+  document.getElementById("statCrit").textContent = sum("critique");
+  document.getElementById("statMaj").textContent = sum("majeur");
+  document.getElementById("statMin").textContent = sum("mineur");
+  document.getElementById("statLoc").textContent = fmt(totalLoc);
+
+  // Classement par SCORE pondere (la gravite prime sur le nombre brut)
+  const sorted = [...DATA].sort((a, b) => {
+    if (a.nonAnalysable && !b.nonAnalysable) return 1;
+    if (!a.nonAnalysable && b.nonAnalysable) return -1;
+    return (b.score || 0) - (a.score || 0);
+  });
+
+  const board = document.getElementById("leaderboard");
+  board.innerHTML = "";
+  sorted.forEach((r, i) => {
+    const row = document.createElement("div");
+    row.className = "row" + (r.nonAnalysable ? " dead" : "");
+    if (r.nonAnalysable) {
+      row.innerHTML = `
+        <div class="rank">-</div>
+        <div class="who">${esc(r.etudiant || r.repo)}<small>${esc(r.repo)}</small></div>
+        <div class="badge-dead">non analysable</div>`;
+    } else {
+      // Barre empilee : largeur totale proportionnelle au score, segmentee par gravite
+      const widthPct = maxScore > 0 ? Math.round(((r.score || 0) / maxScore) * 100) : 0;
+      const c = sev(r, "critique"), m = sev(r, "majeur"), n = sev(r, "mineur");
+      const tot = c + m + n;
+      const seg = (val, cls) => tot > 0 && val > 0
+        ? `<div class="bar ${cls}" style="width:${(val / tot) * 100}%"></div>` : "";
+      const crit = c > 0 ? ` · ${c} crit.` : "";
+      const hist = historyFor(r.repo);
+      const prev = hist.length >= 2 ? hist[hist.length - 2].total : null;
+      const deltaHtml = prev != null ? `<div style="margin-top:4px">${deltaBadge(prev, r.total || 0)}</div>` : "";
+      row.innerHTML = `
+        <div class="rank">${i + 1}</div>
+        <div class="who">${esc(r.etudiant || r.repo)}<small>${esc(r.repo)}</small></div>
+        <div class="count"><span class="score-cap">score</span>${r.score || 0}<small>${fmt(r.lignesDeCode || 0)} lignes · ${r.total || 0} soucis${crit}</small>${deltaHtml}</div>
+        <div class="barwrap"><div class="barfill" style="width:${widthPct}%">${seg(c, "crit")}${seg(m, "maj")}${seg(n, "min")}</div></div>`;
+      row.addEventListener("click", () => selectRepo(r, row));
+    }
+    board.appendChild(row);
+  });
+
+  renderTypeView();
+  renderEvolution();
+
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("content").style.display = "block";
+}
+
+// Vue Evolution : une ligne par repo, courbe du score + delta de soucis
+function renderEvolution() {
+  const tab = document.getElementById("tabEvolution");
+  const hasHistory = HISTORY.length > 0;
+  tab.style.display = hasHistory ? "" : "none";
+  if (!hasHistory) return;
+
+  const repos = [...new Set(HISTORY.map(h => h.repo))]
+    .map(repo => ({ repo, entries: historyFor(repo) }))
+    .sort((a, b) => (b.entries[b.entries.length - 1].score || 0) - (a.entries[a.entries.length - 1].score || 0));
+
+  document.getElementById("evolutionList").innerHTML = repos.map(({ repo, entries }) => {
+    const cur = entries[entries.length - 1];
+    const prev = entries.length >= 2 ? entries[entries.length - 2] : null;
+    const scores = entries.map(e => e.score || 0);
+    const runs = entries.length;
+    const dDelta = prev ? deltaBadge(prev.total, cur.total) : `<span class="delta flat">1re analyse</span>`;
+    return `<div class="erow">
+      <div>
+        <div class="ename"><span class="pname">${esc(cur.etudiant || repo)}</span></div>
+        <div class="esub">${runs} analyse${runs > 1 ? "s" : ""} · ${cur.total} soucis · ${fmt(cur.lignesDeCode || 0)} lignes</div>
+      </div>
+      ${sparkline(scores)}
+      <div class="ecur">
+        <span class="escap">score</span>
+        <div class="escore">${cur.score || 0}</div>
+        <div class="edelta">${dDelta}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// Vue transversale : une ligne par type d'erreur, triee par projets touches
+function renderTypeView() {
+  const valid = DATA.filter(r => !r.nonAnalysable);
+  const nbRepos = valid.length;
+  const anyDeep = valid.some(r => r.modeDeep);
+  const sevRank = { crit: 0, maj: 1, min: 2 };
+
+  const rows = Object.keys(RULES).map(key => {
+    let total = 0, repos = 0;
+    valid.forEach(r => {
+      const n = (r.parRegle && r.parRegle[key]) || 0;
+      total += n;
+      if (n > 0) repos += 1;
+    });
+    const dim = RULES[key].deep && !anyDeep;  // regle deep jamais executee
+    return { key, total, repos, dim, ...RULES[key] };
+  }).sort((a, b) =>
+    b.repos - a.repos || b.total - a.total || sevRank[a.sev] - sevRank[b.sev]);
+
+  const html = rows.map(x => {
+    const pct = nbRepos > 0 ? Math.round((x.repos / nbRepos) * 100) : 0;
+    const reposTxt = x.dim ? "mode --deep requis"
+      : `${x.repos}/${nbRepos} projet${x.repos > 1 ? "s" : ""} touche${x.repos > 1 ? "s" : ""}`;
+    return `<div class="trow ${x.sev}${x.dim ? " dim" : ""}">
+      <div class="temo">${x.emo}</div>
+      <div>
+        <div class="tname">${x.label}</div>
+        <div class="tdesc">${esc(DESC[x.key] || "")}</div>
+      </div>
+      <div class="tnums">
+        <div class="tcount">${x.dim ? "—" : x.total}</div>
+        <div class="trepos">${reposTxt}</div>
+        ${x.dim ? "" : `<div class="treposbar"><div class="treposfill" style="width:${pct}%"></div></div>`}
+      </div>
+    </div>`;
+  }).join("");
+  document.getElementById("typeList").innerHTML = html;
+}
+
+function switchView(view) {
+  document.querySelectorAll(".tab").forEach(t =>
+    t.classList.toggle("active", t.dataset.view === view));
+  document.getElementById("viewClassement").style.display = view === "classement" ? "block" : "none";
+  document.getElementById("viewType").style.display = view === "type" ? "block" : "none";
+  document.getElementById("viewEvolution").style.display = view === "evolution" ? "block" : "none";
+}
+
+function selectRepo(r, row) {
+  document.querySelectorAll(".row").forEach(el => el.classList.remove("active"));
+  row.classList.add("active");
+
+  const d = document.getElementById("detail");
+  const allExamples = r.exemples || [];
+
+  const deepOff = RULES && r.modeDeep === false;
+
+  const renderCat = key => {
+    const n = (r.parRegle && r.parRegle[key]) || 0;
+    // Regle deep non executee (scan standard) : grisee, pas "0" trompeur
+    if (RULES[key].deep && deepOff) {
+      return `<div class="cat" data-key="${key}">
+        <div class="cat-head">
+          <div class="chevron"></div>
+          <div class="emo">${RULES[key].emo}</div>
+          <div class="name" style="color:var(--ink-3)">${RULES[key].label}</div>
+          <div class="n zero" title="mode --deep non execute">—</div>
+        </div></div>`;
+    }
+    const exs = allExamples.filter(e => e.regle === key);
+    const hasBody = exs.length > 0;
+    const reste = n - exs.length;
+    const findings = exs.map(ex => renderFinding(ex)).join("");
+    const more = reste > 0
+      ? `<div class="more">… et ${reste} autre${reste > 1 ? "s" : ""} (non echantillonne${reste > 1 ? "s" : ""})</div>`
+      : "";
+    return `<div class="cat" data-key="${key}">
+      <div class="cat-head ${hasBody ? "clickable" : ""}">
+        <div class="chevron">${hasBody ? "▶" : ""}</div>
+        <div class="emo">${RULES[key].emo}</div>
+        <div class="name">${RULES[key].label}</div>
+        <div class="n ${n === 0 ? "zero" : ""}">${n}</div>
+      </div>
+      ${hasBody ? `<div class="cat-body">${findings}${more}</div>` : ""}
+    </div>`;
+  };
+
+  // Detail organise hierarchiquement : un bloc par niveau de gravite
+  const groups = SEVERITIES.map(s => {
+    const keys = Object.keys(RULES).filter(k => RULES[k].sev === s.key);
+    const stot = sev(r, s.api);
+    return `<div class="sev-group">
+      <div class="sev-head ${s.key}">
+        <i class="dot ${s.key}"></i> ${s.label}
+        <span class="poids">poids ${s.poids}</span>
+        <span class="stot">${stot}</span>
+      </div>
+      ${keys.map(renderCat).join("")}
+    </div>`;
+  }).join("");
+
+  const deepBadge = r.modeDeep
+    ? `<span class="deep-badge on" title="${esc(JSON.stringify(r.deepStatus || {}))}">✓ mode deep (gitleaks, trivy, jscpd, tsc, AST)</span>`
+    : `<span class="deep-badge off">mode standard — relance avec --deep pour secrets/types/duplication/AST</span>`;
+
+  const dens = densite(r);
+  const densTxt = dens ? ` · ${dens} soucis / 1000 lignes` : "";
+  d.innerHTML = `
+    <h3><span class="pname">${esc(r.etudiant || r.repo)}</span> · score ${r.score || 0}</h3>
+    <div class="repo"><span class="pname">${esc(r.repo)}</span> · ${fmt(r.lignesDeCode || 0)} lignes · ${r.total || 0} soucis${densTxt}</div>
+    <div>${deepBadge}</div>
+    ${groups}`;
+
+  // Accordeon : clic sur une categorie ouvre/ferme ses soucis
+  d.querySelectorAll(".cat-head.clickable").forEach(head => {
+    head.addEventListener("click", () => head.parentElement.classList.toggle("open"));
+  });
+}
+
+// Un souci en bloc de code facon GitHub (numeros + ligne fautive surlignee)
+function renderFinding(ex) {
+  let code = "";
+  if (ex.contexte && ex.contexte.length) {
+    code = `<div class="code">${ex.contexte.map(l => `
+      <div class="cline ${l.cible ? "target" : ""}">
+        <span class="ln">${l.n}</span><span class="src">${esc(l.code) || " "}</span>
+      </div>`).join("")}</div>`;
+  }
+  return `
+    <div class="finding">
+      <div class="fhead">
+        <span class="path">${esc(ex.fichier)}:${ex.ligne}</span>
+        ${ex.detail ? `<span class="det">${esc(ex.detail)}</span>` : ""}
+      </div>
+      ${code}
+    </div>`;
+}
+
+function esc(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// Nombre avec separateur de milliers (espace fine, format FR)
+function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " "); }
+
+// Densite de dette : soucis pour 1000 lignes (contextualise le volume de code)
+function densite(r) {
+  const loc = r.lignesDeCode || 0;
+  if (loc < 1) return null;
+  return ((r.total || 0) / loc * 1000).toFixed(1);
+}
+
+function loadJSON(text) {
+  try {
+    DATA = normalize(JSON.parse(text));
+    render();
+  } catch (e) {
+    alert("rapport.json illisible : " + e.message);
+  }
+}
+
+// --- Onglets ---
+document.querySelectorAll(".tab").forEach(t =>
+  t.addEventListener("click", () => switchView(t.dataset.view)));
+
+// --- Confidentialite des noms (flou par defaut, oeil pour devoiler) ---
+const EYE_ON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
+const EYE_OFF = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-7-11-7a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+// Anonyme par defaut en classe ; mais un rapport individuel (HTML embarque pour
+// un seul etudiant) affiche son nom directement.
+let namesHidden = false;
+function applyNames() {
+  document.body.classList.toggle("hide-names", namesHidden);
+  const btn = document.getElementById("nameToggle");
+  btn.classList.toggle("revealed", !namesHidden);
+  btn.innerHTML = namesHidden
+    ? `${EYE_ON}<span>Afficher les noms</span>`
+    : `${EYE_OFF}<span>Masquer les noms</span>`;
+}
+document.getElementById("nameToggle").addEventListener("click", () => {
+  namesHidden = !namesHidden;
+  applyNames();
+});
+applyNames();
+
+// Un fichier glisse/choisi : rapport.json OU historique.json (detecte par forme)
+function looksLikeHistory(parsed) {
+  return Array.isArray(parsed) && parsed.length > 0
+    && parsed.every(x => x && typeof x === "object" && "date" in x);
+}
+function loadFile(text) {
+  let parsed;
+  try { parsed = JSON.parse(text); }
+  catch (e) { alert("JSON illisible : " + e.message); return; }
+  if (looksLikeHistory(parsed)) {
+    HISTORY = parsed;
+    if (DATA.length) render();
+    else alert("Historique charge. Glisse aussi ton rapport.json pour voir le detail.");
+  } else {
+    DATA = normalize(parsed);
+    render();
+  }
+}
+
+// --- Chargement par fichier ---
+const fileInput = document.getElementById("fileInput");
+document.getElementById("pickBtn").addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => loadFile(reader.result);
+  reader.readAsText(f);
+});
+
+// --- Glisser-deposer (accepte plusieurs fichiers : rapport + historique) ---
+const loader = document.getElementById("loader");
+["dragenter", "dragover"].forEach(ev =>
+  loader.addEventListener(ev, e => { e.preventDefault(); loader.classList.add("drag"); }));
+["dragleave", "drop"].forEach(ev =>
+  loader.addEventListener(ev, e => { e.preventDefault(); loader.classList.remove("drag"); }));
+loader.addEventListener("drop", e => {
+  [...e.dataTransfer.files].forEach(f => {
+    const reader = new FileReader();
+    reader.onload = () => loadFile(reader.result);
+    reader.readAsText(f);
+  });
+});
+
+// --- Chargement auto : historique (optionnel) PUIS rapport, pour avoir les deltas ---
+const histPromise = window.__HISTORIQUE__
+  ? Promise.resolve(window.__HISTORIQUE__)
+  : fetch("historique.json").then(r => r.ok ? r.json() : []).catch(() => []);
+histPromise.then(h => { HISTORY = Array.isArray(h) ? h : []; }).finally(() => {
+  if (window.__RAPPORT__) {
+    loadJSON(JSON.stringify(window.__RAPPORT__));  // HTML autonome embarque
+  } else {
+    fetch("rapport.json")
+      .then(res => { if (res.ok) return res.text(); throw new Error("no auto"); })
+      .then(loadJSON)
+      .catch(() => { /* file:// : on attend le chargement manuel */ });
+  }
+});
+</script>
+</body>
+</html>

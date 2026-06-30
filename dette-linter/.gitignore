@@ -1,0 +1,11 @@
+# Le rapport genere reste local (peut contenir des extraits de ton code)
+rapport.json
+rapports-individuels/
+
+# Python
+__pycache__/
+*.pyc
+
+# Node (mode --deep)
+node_modules/
+historique.json
