@@ -33,3 +33,6 @@ iim-examples/
 
 # Build slides (genere)
 slides/dist/
+
+# Dashboard de la dette : le rapport contient noms/scores etudiants
+dashboard/rapport.json
