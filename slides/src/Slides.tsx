@@ -334,42 +334,319 @@ const S1: React.FC = () => {
   );
 };
 
-// S2 — Bloc B : context window — gros chiffre 200 000 (Sonnet 4.6)
-const S2: React.FC = () => (
-  <AbsoluteFill
-    style={{
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: 120,
-      padding: '0 150px',
-    }}
-  >
-    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4}}>
-      <BigStat value="200 000" unit="Tokens max — Sonnet 4.6" delay={10} />
+// S1b — NOUVEAU : Modèle + Harness = Produit
+const SHarness: React.FC = () => {
+  const frame = useCurrentFrame();
+  const harnessParts = ['System prompt', 'Tools', 'Logique agent', 'Garde-fous', 'Mémoire'];
+  const products = [
+    {name: 'Claude Code', tag: 'CLI dev'},
+    {name: 'Claude.ai', tag: 'Chat web'},
+    {name: 'Cowork', tag: 'Collaboration'},
+  ];
+  const productsOp = interpolate(frame, [85, 100], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  return (
+    <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 18, padding: '40px 80px'}}>
+      <KineticText text="MODÈLE + HARNESS = PRODUIT" fontSize={28} color={COLORS.orange} />
+      {/* Schéma : modèle au centre, harness autour */}
+      <div
+        style={{
+          position: 'relative',
+          width: 720,
+          height: 360,
+          border: `2px dashed ${COLORS.blue}66`,
+          borderRadius: 24,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 24,
+          marginTop: 8,
+          opacity: interpolate(frame, [12, 24], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+        }}
+      >
+        {/* Label "HARNESS" en haut */}
+        <span
+          style={{
+            position: 'absolute',
+            top: -16,
+            left: 32,
+            background: COLORS.bg,
+            padding: '0 12px',
+            fontFamily: FONT_FAMILY,
+            fontSize: 22,
+            fontWeight: 800,
+            color: COLORS.blue,
+            letterSpacing: 1.5,
+          }}
+        >
+          HARNESS (par Anthropic)
+        </span>
+        {/* Pièces du harness en haut */}
+        <div
+          style={{
+            display: 'flex',
+            gap: 12,
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            marginBottom: 18,
+          }}
+        >
+          {harnessParts.slice(0, 3).map((p, i) => {
+            const delay = 32 + i * 6;
+            const o = interpolate(frame, [delay, delay + 10], [0, 1], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+            });
+            return (
+              <span
+                key={i}
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontSize: 18,
+                  color: COLORS.text,
+                  opacity: o * 0.85,
+                  padding: '4px 12px',
+                  border: `1px solid ${COLORS.blue}55`,
+                  borderRadius: 8,
+                }}
+              >
+                {p}
+              </span>
+            );
+          })}
+        </div>
+        {/* Modèle au centre */}
+        <div
+          style={{
+            background: COLORS.orange,
+            color: COLORS.bg,
+            padding: '22px 38px',
+            borderRadius: 16,
+            fontFamily: FONT_FAMILY,
+            fontWeight: 900,
+            textAlign: 'center',
+          }}
+        >
+          <div style={{fontSize: 36, letterSpacing: 1}}>MODÈLE</div>
+          <div style={{fontSize: 22, opacity: 0.85, marginTop: 4}}>
+            Sonnet 4.6 (prédicteur autoregressif)
+          </div>
+        </div>
+        {/* Pièces du harness en bas */}
+        <div
+          style={{
+            display: 'flex',
+            gap: 12,
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            marginTop: 18,
+          }}
+        >
+          {harnessParts.slice(3).map((p, i) => {
+            const delay = 56 + i * 6;
+            const o = interpolate(frame, [delay, delay + 10], [0, 1], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+            });
+            return (
+              <span
+                key={i}
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontSize: 18,
+                  color: COLORS.text,
+                  opacity: o * 0.85,
+                  padding: '4px 12px',
+                  border: `1px solid ${COLORS.blue}55`,
+                  borderRadius: 8,
+                }}
+              >
+                {p}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+      {/* 3 produits qui utilisent le même modèle avec des harnesses différents */}
       <span
         style={{
           fontFamily: FONT_FAMILY,
-          fontSize: 22,
+          fontSize: 20,
           color: COLORS.blue,
-          marginTop: 18,
-          opacity: 0.85,
+          opacity: productsOp,
+          marginTop: 12,
+          fontStyle: 'italic',
         }}
       >
-        (Opus 4.8 et Haiku 4.5 : ~200k aussi · Gemini 2.5 Pro : 2M)
+        Même modèle, harnesses différents :
       </span>
-    </div>
-    <div style={{display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 620}}>
-      <KineticText text="LE CONTEXTE" fontSize={30} color={COLORS.orange} align="left" />
-      <KineticText
-        text="Tout compte : prompt, tools, fichiers, historique."
-        delay={20}
-        fontSize={48}
-        align="left"
-      />
-    </div>
-  </AbsoluteFill>
-);
+      <div style={{display: 'flex', gap: 24, opacity: productsOp}}>
+        {products.map((p, i) => (
+          <div
+            key={i}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: '12px 24px',
+              border: `2px solid ${COLORS.orange}55`,
+              borderRadius: 12,
+              minWidth: 180,
+              background: `${COLORS.orange}08`,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: FONT_FAMILY,
+                fontWeight: 800,
+                fontSize: 26,
+                color: COLORS.orange,
+              }}
+            >
+              {p.name}
+            </span>
+            <span
+              style={{
+                fontFamily: FONT_FAMILY,
+                fontSize: 18,
+                color: COLORS.text,
+                opacity: 0.75,
+                marginTop: 2,
+              }}
+            >
+              {p.tag}
+            </span>
+          </div>
+        ))}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+// S2 — Bloc B : context window — gros chiffre + jauge stratifiée
+const S2: React.FC = () => {
+  const frame = useCurrentFrame();
+  const sections = [
+    {label: 'System prompt', tokens: 5000, color: COLORS.blue},
+    {label: 'Tools defs', tokens: 20000, color: COLORS.blue},
+    {label: 'CLAUDE.md', tokens: 3000, color: COLORS.blue},
+    {label: 'Fichiers lus', tokens: 50000, color: COLORS.orange},
+    {label: 'Historique', tokens: 100000, color: COLORS.orange},
+    {label: 'Libre', tokens: 22000, color: COLORS.text},
+  ];
+  const total = 200000;
+  return (
+    <AbsoluteFill
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 100,
+        padding: '0 120px',
+      }}
+    >
+      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4}}>
+        <BigStat value="200 000" unit="Tokens max — Sonnet 4.6" delay={10} />
+        <span
+          style={{
+            fontFamily: FONT_FAMILY,
+            fontSize: 22,
+            color: COLORS.blue,
+            marginTop: 12,
+            opacity: 0.85,
+          }}
+        >
+          (Opus 4.8, Haiku 4.5 : ~200k · Gemini 2.5 Pro : 2M)
+        </span>
+        <span
+          style={{
+            fontFamily: FONT_FAMILY,
+            fontSize: 26,
+            color: COLORS.orange,
+            fontWeight: 700,
+            marginTop: 18,
+            opacity: interpolate(frame, [85, 100], [0, 1], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+            }),
+            textAlign: 'center',
+          }}
+        >
+          → 90 % déjà occupé avant que vous tapiez quoi que ce soit.
+        </span>
+      </div>
+      {/* Jauge stratifiée — ce qui REMPLIT le contexte */}
+      <div style={{display: 'flex', flexDirection: 'column', gap: 4, width: 460}}>
+        <span
+          style={{
+            fontFamily: FONT_FAMILY,
+            fontSize: 22,
+            color: COLORS.orange,
+            letterSpacing: 1.5,
+            textTransform: 'uppercase',
+            opacity: interpolate(frame, [20, 32], [0, 1], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+            }),
+            marginBottom: 8,
+          }}
+        >
+          Ce qui se charge à chaque appel
+        </span>
+        {sections.map((s, i) => {
+          const delay = 38 + i * 9;
+          const o = interpolate(frame, [delay, delay + 12], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          const widthPct = (s.tokens / total) * 100;
+          return (
+            <div key={i} style={{display: 'flex', alignItems: 'center', gap: 12, opacity: o}}>
+              <span
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontWeight: 600,
+                  fontSize: 20,
+                  color: COLORS.text,
+                  width: 150,
+                  textAlign: 'right',
+                }}
+              >
+                {s.label}
+              </span>
+              <div
+                style={{
+                  width: `${widthPct * 2.4}px`,
+                  height: 26,
+                  background: s.color,
+                  borderRadius: 4,
+                  opacity: s.label === 'Libre' ? 0.25 : 0.85,
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontSize: 18,
+                  color: COLORS.text,
+                  opacity: 0.75,
+                  fontWeight: 600,
+                }}
+              >
+                {s.tokens >= 1000 ? `${(s.tokens / 1000).toFixed(0)} k` : s.tokens}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </AbsoluteFill>
+  );
+};
 
 // S3 — Bloc C : dégradation — schéma "U" attention début/milieu/fin
 const S3: React.FC = () => {
@@ -457,7 +734,7 @@ const S3: React.FC = () => {
             extrapolateLeft: 'clamp',
             extrapolateRight: 'clamp',
           }),
-          marginTop: 14,
+          marginTop: 12,
           padding: '10px 22px',
           border: `2px solid ${COLORS.blue}`,
           borderRadius: 10,
@@ -471,6 +748,21 @@ const S3: React.FC = () => {
       >
         📄 Source : Liu et al. 2023 — Lost in the Middle
       </a>
+      {/* Soupape : session compacting + /clear */}
+      <span
+        style={{
+          fontFamily: FONT_FAMILY,
+          fontSize: 18,
+          color: COLORS.text,
+          opacity: interpolate(frame, [130, 142], [0, 0.7], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+          marginTop: 8,
+        }}
+      >
+        💡 Soupape : Claude Code <strong style={{color: COLORS.orange}}>compacte</strong> auto · <span style={{fontFamily: '"JetBrains Mono", Menlo, monospace', color: COLORS.orange}}>/clear</span> pour reset manuel
+      </span>
     </AbsoluteFill>
   );
 };
@@ -568,21 +860,85 @@ const S6: React.FC = () => {
   );
 };
 
-// S7 ⭐ — Bloc E réponse : skill + script — cogs + code stylé
-const S7: React.FC = () => (
-  <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 40}}>
-    <Reveal delay={6}>
-      <LordiconIcon file={ICON.cogs} color={COLORS.orange} width={240} height={240} />
-    </Reveal>
-    <KineticText text="LA RÉPONSE" delay={22} fontSize={30} color={COLORS.orange} />
-    <div style={{display: 'flex', alignItems: 'center', gap: 24, marginTop: 8}}>
-      <CodeChip text="SKILL.md" delay={42} />
-      <span style={{fontSize: 60, color: COLORS.text, fontFamily: FONT_FAMILY, fontWeight: 800}}>+</span>
-      <CodeChip text="script.py" delay={54} />
-    </div>
-    <KineticText text="Le LLM décide. Le script exécute." delay={72} fontSize={36} />
-  </AbsoluteFill>
-);
+// S7 ⭐ — Bloc E réponse : pattern phare + autres pièces du cadrage
+const S7: React.FC = () => {
+  const frame = useCurrentFrame();
+  const supporting = ['CLAUDE.md', 'PROJECT_RULES', 'ARCHITECTURE.md', '.plan.md', 'DECISIONS.md'];
+  const supportOp = interpolate(frame, [88, 102], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  return (
+    <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 26}}>
+      <Reveal delay={6}>
+        <LordiconIcon file={ICON.cogs} color={COLORS.orange} width={200} height={200} />
+      </Reveal>
+      <KineticText text="LA RÉPONSE — CADRER" delay={22} fontSize={30} color={COLORS.orange} />
+      {/* Pattern phare au centre */}
+      <div style={{display: 'flex', alignItems: 'center', gap: 24, marginTop: 4}}>
+        <CodeChip text="SKILL.md" delay={42} />
+        <span style={{fontSize: 56, color: COLORS.text, fontFamily: FONT_FAMILY, fontWeight: 800}}>+</span>
+        <CodeChip text="script.py" delay={54} />
+      </div>
+      <KineticText text="Le LLM décide. Le script exécute." delay={72} fontSize={32} />
+      {/* Autres fichiers de cadrage en chips discrets */}
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 10,
+          justifyContent: 'center',
+          maxWidth: 1100,
+          marginTop: 6,
+          opacity: supportOp,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: FONT_FAMILY,
+            fontSize: 20,
+            color: COLORS.blue,
+            marginRight: 6,
+            fontWeight: 600,
+          }}
+        >
+          + tout ce qui cadre :
+        </span>
+        {supporting.map((name, i) => (
+          <span
+            key={i}
+            style={{
+              fontFamily: '"JetBrains Mono", "Fira Code", Menlo, monospace',
+              fontSize: 20,
+              color: COLORS.text,
+              opacity: 0.7,
+              padding: '4px 14px',
+              border: `1px solid ${COLORS.text}33`,
+              borderRadius: 8,
+            }}
+          >
+            {name}
+          </span>
+        ))}
+      </div>
+      <span
+        style={{
+          fontFamily: FONT_FAMILY,
+          fontSize: 20,
+          color: COLORS.blue,
+          opacity: interpolate(frame, [110, 124], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+          marginTop: 8,
+          fontStyle: 'italic',
+        }}
+      >
+        On voit tout ça en détail au fil de la semaine.
+      </span>
+    </AbsoluteFill>
+  );
+};
 
 // S8 — Bloc F : écosystème — 4 cartes outils cliquables
 const S8: React.FC = () => {
@@ -673,9 +1029,9 @@ const S8: React.FC = () => {
 const S9: React.FC = () => {
   const frame = useCurrentFrame();
   const days = [
-    {label: 'J1 — Lundi', detail: 'Vibe coding. Le mur.', color: COLORS.orange},
+    {label: 'J1 — Lundi', detail: 'Vibe coding. Découverte des limites.', color: COLORS.orange},
     {label: 'J2 — Mardi', detail: 'Cadrage. Skills. Scripts.', color: COLORS.text},
-    {label: 'J3 — Mercredi', detail: 'Workflows avancés. MCP.', color: COLORS.text},
+    {label: 'J3 — Mercredi', detail: 'Outils externes. MCP, sous-agents, plans.', color: COLORS.text},
     {label: 'J4 — Jeudi', detail: 'Audit. Soutenance.', color: COLORS.blue},
   ];
   return (
@@ -824,7 +1180,7 @@ const SlideFade: React.FC<{children: React.ReactNode}> = ({children}) => {
   return <AbsoluteFill style={{opacity: o}}>{children}</AbsoluteFill>;
 };
 
-export const SLIDE_COMPONENTS = [S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11];
+export const SLIDE_COMPONENTS = [S0, S1, SHarness, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11];
 export const SLIDE_COUNT = SLIDE_COMPONENTS.length;
 export const TOTAL = SLIDE * SLIDE_COUNT;
 

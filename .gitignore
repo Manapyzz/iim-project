@@ -23,3 +23,13 @@ attachments/
 jour-*/notes-*.md
 jour-*/schema-*.md
 jour-*/script-*.md
+
+# Node modules (slides/)
+node_modules/
+.pnpm-store/
+
+# iim-examples est un repo separe (Manapyzz/iim-examples)
+iim-examples/
+
+# Build slides (genere)
+slides/dist/

@@ -1,25 +1,36 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Player, PlayerRef} from '@remotion/player';
 import {SlidesComp, SLIDE, SLIDE_COUNT, TOTAL} from './Slides';
+import {J2SlidesComp, J2_SLIDE_COUNT, J2_TOTAL} from './J2Slides';
 
 /**
  * Deck de présentation type PowerPoint :
  * - Espace / → : slide suivante (déclenche son animation, puis pause à la fin)
  * - ← : slide précédente
  * - F : plein écran
+ *
+ * Choix du deck via URL :
+ * - / ou /?j=1 → deck J1 (théorie)
+ * - /?j=2 → deck J2 (cadrage)
  */
 export const Deck: React.FC = () => {
   const ref = useRef<PlayerRef>(null);
   const [cur, setCur] = useState(0);
 
+  // Détermine quel deck afficher en fonction de l'URL.
+  const isJ2 = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('j') === '2';
+  const ActiveComp = isJ2 ? J2SlidesComp : SlidesComp;
+  const ActiveCount = isJ2 ? J2_SLIDE_COUNT : SLIDE_COUNT;
+  const ActiveTotal = isJ2 ? J2_TOTAL : TOTAL;
+
   const goTo = useCallback((i: number) => {
-    const clamped = Math.max(0, Math.min(SLIDE_COUNT - 1, i));
+    const clamped = Math.max(0, Math.min(ActiveCount - 1, i));
     setCur(clamped);
     const p = ref.current;
     if (!p) return;
     p.seekTo(clamped * SLIDE);
     p.play();
-  }, []);
+  }, [ActiveCount]);
 
   // Met en pause à la fin de la slide courante (pour attendre l'appui suivant).
   useEffect(() => {
@@ -72,8 +83,8 @@ export const Deck: React.FC = () => {
     >
       <Player
         ref={ref}
-        component={SlidesComp}
-        durationInFrames={TOTAL}
+        component={ActiveComp}
+        durationInFrames={ActiveTotal}
         compositionWidth={1920}
         compositionHeight={1080}
         fps={30}
@@ -82,6 +93,24 @@ export const Deck: React.FC = () => {
         doubleClickToFullscreen
         style={{width: '100%', maxWidth: '100vw', aspectRatio: '16 / 9'}}
       />
+      {/* Badge J1 / J2 en haut */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 20,
+          right: 28,
+          padding: '6px 14px',
+          borderRadius: 6,
+          background: 'rgba(0,0,0,0.5)',
+          color: '#FF7A1A',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+          fontWeight: 800,
+          fontSize: 14,
+          letterSpacing: 1,
+        }}
+      >
+        {isJ2 ? 'J2 — CADRAGE' : 'J1 — THÉORIE'}
+      </div>
       <div
         style={{
           position: 'absolute',
@@ -93,7 +122,7 @@ export const Deck: React.FC = () => {
           gap: 12,
         }}
       >
-        {Array.from({length: SLIDE_COUNT}).map((_, i) => (
+        {Array.from({length: ActiveCount}).map((_, i) => (
           <div
             key={i}
             style={{
