@@ -1585,6 +1585,185 @@ const J3S7: React.FC = () => {
   );
 };
 
+// J3-S8 — SOUTENANCE J4 : rappel format + niveaux
+const J3S8: React.FC = () => {
+  const frame = useCurrentFrame();
+  const blocs = [
+    {duree: '30 sec', quoi: 'Sujet + complexité', delay: 20},
+    {duree: '1 min', quoi: 'CLAUDE.md + conventions', delay: 28},
+    {duree: '2 min', quoi: 'Démo LIVE d\'1 skill + son script', delay: 36},
+    {duree: '1 min 30', quoi: 'Analyse critique : marché / cassé / pourquoi', delay: 44},
+  ];
+  const attentes = [
+    {label: 'CONTRÔLE', quoi: 'vous maîtrisez votre appli, pas l\'inverse', delay: 58},
+    {label: 'DETTE', quoi: 'vous savez ce qui est propre et ce qui est chaud', delay: 66},
+    {label: 'PILOTAGE', quoi: 'LLM utilisé à fond ET vous savez comment ça marche', delay: 74},
+    {label: 'RÉCIT', quoi: 'vous ouvrez votre projet et vous savez le raconter', delay: 82},
+  ];
+  return (
+    <AbsoluteFill
+      style={{
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 14,
+        padding: '0 80px',
+      }}
+    >
+      <Reveal delay={2}>
+        <LordiconIcon file={ICON.trophy} color={COLORS.orange} width={110} height={110} />
+      </Reveal>
+      <KineticText text="SOUTENANCE J4 — DEMAIN APRÈS-MIDI" delay={8} fontSize={28} color={COLORS.orange} />
+      <span
+        style={{
+          fontFamily: FONT_FAMILY,
+          fontSize: 18,
+          color: COLORS.text,
+          opacity: 0.75,
+        }}
+      >
+        Deadline rendu : <strong style={{color: COLORS.orange}}>demain 12h30</strong> · repo partagé avec <strong style={{color: COLORS.orange}}>Manapyzz</strong>
+      </span>
+
+      {/* Format prez */}
+      <div
+        style={{
+          marginTop: 6,
+          padding: '10px 20px',
+          border: `2px solid ${COLORS.orange}40`,
+          borderRadius: 10,
+          background: `${COLORS.orange}08`,
+          width: '100%',
+          maxWidth: 1200,
+          opacity: interpolate(frame, [12, 24], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+        }}
+      >
+        <span style={{fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 17, color: COLORS.orange}}>
+          Format : 5 min prez + 3 min Q&A · écran partagé, pas de slides obligatoires
+        </span>
+      </div>
+
+      {/* 4 blocs prez */}
+      <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, width: '100%', maxWidth: 1200, marginTop: 4}}>
+        {blocs.map((b, i) => {
+          const op = interpolate(frame, [b.delay, b.delay + 8], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          return (
+            <div
+              key={i}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                padding: '8px 16px',
+                border: `2px solid ${COLORS.blue}40`,
+                borderRadius: 8,
+                background: `${COLORS.blue}10`,
+                opacity: op,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: '"JetBrains Mono", Menlo, monospace',
+                  fontSize: 14,
+                  color: COLORS.blue,
+                  fontWeight: 800,
+                  minWidth: 70,
+                }}
+              >
+                {b.duree}
+              </span>
+              <span style={{fontFamily: FONT_FAMILY, fontSize: 15, color: COLORS.text}}>
+                {b.quoi}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Ce que j'attends de vous */}
+      <span
+        style={{
+          fontFamily: FONT_FAMILY,
+          fontWeight: 800,
+          fontSize: 17,
+          color: COLORS.orange,
+          marginTop: 4,
+          opacity: interpolate(frame, [52, 60], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+        }}
+      >
+        Ce que j'attends de vous :
+      </span>
+      <div style={{display: 'flex', flexDirection: 'column', gap: 6, width: '100%', maxWidth: 1200}}>
+        {attentes.map((a, i) => {
+          const op = interpolate(frame, [a.delay, a.delay + 8], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          return (
+            <div
+              key={i}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 16,
+                padding: '8px 18px',
+                border: `2px solid ${COLORS.orange}40`,
+                borderRadius: 8,
+                background: `${COLORS.orange}08`,
+                opacity: op,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontWeight: 900,
+                  fontSize: 17,
+                  color: COLORS.orange,
+                  minWidth: 160,
+                  letterSpacing: 0.5,
+                }}
+              >
+                {a.label}
+              </span>
+              <span style={{fontFamily: FONT_FAMILY, fontSize: 15, color: COLORS.text}}>
+                {a.quoi}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Punch line */}
+      <div
+        style={{
+          marginTop: 8,
+          padding: '10px 24px',
+          border: `2px solid ${COLORS.orange}`,
+          borderRadius: 10,
+          background: `${COLORS.orange}15`,
+          opacity: interpolate(frame, [86, 100], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+        }}
+      >
+        <span style={{fontFamily: FONT_FAMILY, fontWeight: 800, fontSize: 17, color: COLORS.orange}}>
+          Le critère qui fait la diff : <strong>vous comprenez votre code</strong>.
+        </span>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 // ============ EXPORT ============
 
 const SlideFade: React.FC<{children: React.ReactNode}> = ({children}) => {
@@ -1598,7 +1777,7 @@ const SlideFade: React.FC<{children: React.ReactNode}> = ({children}) => {
 // Anciens composants J3S1, J3S3, J3S4, J3S6, J3S6b conservés pour référence mais pas dans le deck.
 // Slide J3S6d retirée du deck : l'état des lieux TPB (partiel / pas fait) diluait le message.
 // On traite le sujet "agent isolé autonome" à l'oral avec un schéma au tableau (stagiaire vs employé).
-export const J3_SLIDE_COMPONENTS = [J3S0, J3S0b, J3S2, J3S3fused, J3S5, J3S6fused, J3S6c, J3S7];
+export const J3_SLIDE_COMPONENTS = [J3S0, J3S0b, J3S2, J3S3fused, J3S5, J3S6fused, J3S6c, J3S7, J3S8];
 export const J3_SLIDE_COUNT = J3_SLIDE_COMPONENTS.length;
 export const J3_TOTAL = SLIDE * J3_SLIDE_COUNT;
 
