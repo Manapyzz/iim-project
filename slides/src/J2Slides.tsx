@@ -4,7 +4,7 @@ import {Centered, KineticText, Reveal} from './components';
 import {LordiconIcon} from './LordiconIcon';
 import {COLORS, FONT_FAMILY} from './theme';
 
-// Slides J2 — Cadrage / Skills / Scripts
+// Slides J2 — Cadrage / Scripts / Gates
 // Format : 5 secondes par slide à 30 fps, navigation au clavier dans Deck.
 export const SLIDE = 150;
 
@@ -55,7 +55,7 @@ const J2S0: React.FC = () => (
     file={ICON.shield}
     color={COLORS.orange}
     kicker="JOUR 2 — MARDI"
-    label="Cadrage. Skills. Scripts."
+    label="Cadrage. Scripts. Gates."
     labelSize={84}
   />
 );
@@ -408,13 +408,178 @@ const J2S4: React.FC = () => {
   );
 };
 
+// J2-S4b — Les 3 patterns universels (matchent tous les projets)
+const J2S4b: React.FC = () => {
+  const frame = useCurrentFrame();
+  const patterns = [
+    {
+      icon: ICON.cogs,
+      color: COLORS.orange,
+      name: 'CALCUL MÉTIER',
+      sub: 'TVA, scoring, total…',
+      question: "Empêcher Claude d'inventer une formule",
+      delay: 18,
+    },
+    {
+      icon: ICON.polygon,
+      color: COLORS.blue,
+      name: "MACHINE D'ÉTAT",
+      sub: 'workflow commande, paris…',
+      question: "Empêcher Claude de violer un flow",
+      delay: 32,
+    },
+    {
+      icon: ICON.document,
+      color: '#7C4DFF',
+      name: 'DATA LOOKUP',
+      sub: 'codes postaux, smokes, coefs…',
+      question: "Empêcher Claude d'inventer des data",
+      delay: 46,
+    },
+  ];
+  return (
+    <AbsoluteFill
+      style={{
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 24,
+        padding: '0 100px',
+      }}
+    >
+      <KineticText
+        text="LES 3 PATTERNS UNIVERSELS"
+        delay={4}
+        fontSize={36}
+        color={COLORS.orange}
+      />
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 18,
+          marginTop: 12,
+          width: '100%',
+          maxWidth: 1300,
+        }}
+      >
+        {patterns.map((p, i) => {
+          const op = interpolate(frame, [p.delay, p.delay + 12], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          const x = interpolate(frame, [p.delay, p.delay + 12], [-30, 0], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          return (
+            <div
+              key={i}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 28,
+                padding: '20px 28px',
+                border: `3px solid ${p.color}`,
+                borderRadius: 14,
+                background: `${p.color}12`,
+                opacity: op,
+                transform: `translateX(${x}px)`,
+              }}
+            >
+              <LordiconIcon file={p.icon} color={p.color} width={90} height={90} />
+              <div style={{display: 'flex', flexDirection: 'column', gap: 4, flex: 1}}>
+                <span
+                  style={{
+                    fontFamily: FONT_FAMILY,
+                    fontWeight: 900,
+                    fontSize: 30,
+                    color: p.color,
+                  }}
+                >
+                  {p.name}
+                </span>
+                <span
+                  style={{
+                    fontFamily: FONT_FAMILY,
+                    fontSize: 18,
+                    color: COLORS.text,
+                    opacity: 0.6,
+                    fontStyle: 'italic',
+                  }}
+                >
+                  {p.sub}
+                </span>
+              </div>
+              <div
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontWeight: 700,
+                  fontSize: 22,
+                  color: COLORS.text,
+                  textAlign: 'right',
+                  maxWidth: 360,
+                }}
+              >
+                → {p.question}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div
+        style={{
+          marginTop: 18,
+          padding: '12px 28px',
+          border: `2px solid ${COLORS.orange}`,
+          borderRadius: 12,
+          background: `${COLORS.orange}15`,
+          opacity: interpolate(frame, [70, 90], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+        }}
+      >
+        <span
+          style={{
+            fontFamily: FONT_FAMILY,
+            fontWeight: 800,
+            fontSize: 22,
+            color: COLORS.orange,
+          }}
+        >
+          Chacun de vos projets tombe dans au moins 1 de ces 3 patterns.
+        </span>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 // J2-S5 — Gates (3 niveaux)
 const J2S5: React.FC = () => {
   const frame = useCurrentFrame();
   const levels = [
-    {label: 'Syntaxique', sub: 'ESLint · Prettier · tsc', color: COLORS.blue, delay: 18},
-    {label: 'Tests unitaires', sub: 'Vitest · Jest', color: COLORS.orange, delay: 32},
-    {label: 'Sémantique', sub: 'Linter de dette IA', color: '#7C4DFF', delay: 46},
+    {
+      label: 'Syntaxique',
+      sub: 'ESLint · Prettier · tsc',
+      example: 'ex : refuse un `any` ou un import inutilisé',
+      color: COLORS.blue,
+      delay: 18,
+    },
+    {
+      label: 'Tests unitaires',
+      sub: 'Vitest · Jest',
+      example: 'ex : `calculatePrice(100, "standard") === 120` doit être vrai',
+      color: COLORS.orange,
+      delay: 32,
+    },
+    {
+      label: 'Sémantique',
+      sub: 'Linter de dette IA',
+      example: 'ex : détecte un `try/except: pass` ou un god file > 250L',
+      color: '#7C4DFF',
+      delay: 46,
+    },
   ];
   return (
     <AbsoluteFill
@@ -473,12 +638,12 @@ const J2S5: React.FC = () => {
               >
                 {i + 1}.
               </span>
-              <div style={{display: 'flex', flexDirection: 'column', gap: 4}}>
+              <div style={{display: 'flex', flexDirection: 'column', gap: 4, flex: 1}}>
                 <span
                   style={{
                     fontFamily: FONT_FAMILY,
                     fontWeight: 800,
-                    fontSize: 32,
+                    fontSize: 30,
                     color: COLORS.text,
                   }}
                 >
@@ -487,17 +652,139 @@ const J2S5: React.FC = () => {
                 <span
                   style={{
                     fontFamily: FONT_FAMILY,
-                    fontSize: 22,
+                    fontSize: 20,
                     color: COLORS.text,
                     opacity: 0.7,
                   }}
                 >
                   {l.sub}
                 </span>
+                <span
+                  style={{
+                    fontFamily: '"JetBrains Mono", Menlo, monospace',
+                    fontSize: 17,
+                    color: l.color,
+                    opacity: 0.95,
+                    marginTop: 4,
+                  }}
+                >
+                  {l.example}
+                </span>
               </div>
             </div>
           );
         })}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+// J2-S5b — Gate par feature (TDD avec le LLM)
+const J2S5b: React.FC = () => {
+  const frame = useCurrentFrame();
+  const steps = [
+    {n: 1, label: 'Tu décris la feature à Claude', delay: 14},
+    {n: 2, label: '"Écris UN test qui valide cette feature. NE CODE PAS l\'impl."', delay: 24},
+    {n: 3, label: 'Tu relis le test, tu l\'amendes', delay: 34},
+    {n: 4, label: 'Tu lances le test → il échoue (normal)', delay: 44},
+    {n: 5, label: '"Maintenant implémente." → tu re-lances → ça passe ✓', delay: 54},
+  ];
+  return (
+    <AbsoluteFill
+      style={{
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 22,
+        padding: '0 100px',
+      }}
+    >
+      <Reveal delay={4}>
+        <LordiconIcon file={ICON.target} color={COLORS.orange} width={130} height={130} />
+      </Reveal>
+      <KineticText text="GATE PAR FEATURE — TDD AVEC LE LLM" delay={10} fontSize={32} color={COLORS.orange} />
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 10,
+          marginTop: 8,
+          width: '100%',
+          maxWidth: 1300,
+        }}
+      >
+        {steps.map((s, i) => {
+          const op = interpolate(frame, [s.delay, s.delay + 10], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          const x = interpolate(frame, [s.delay, s.delay + 10], [-20, 0], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+          return (
+            <div
+              key={i}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 22,
+                padding: '14px 24px',
+                border: `2px solid ${COLORS.orange}40`,
+                borderRadius: 12,
+                background: `${COLORS.orange}08`,
+                opacity: op,
+                transform: `translateX(${x}px)`,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontWeight: 900,
+                  fontSize: 28,
+                  color: COLORS.orange,
+                  minWidth: 40,
+                }}
+              >
+                {s.n}
+              </span>
+              <span
+                style={{
+                  fontFamily: FONT_FAMILY,
+                  fontWeight: 600,
+                  fontSize: 22,
+                  color: COLORS.text,
+                }}
+              >
+                {s.label}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      <div
+        style={{
+          marginTop: 8,
+          padding: '12px 28px',
+          border: `2px solid ${COLORS.orange}`,
+          borderRadius: 12,
+          background: `${COLORS.orange}15`,
+          opacity: interpolate(frame, [70, 88], [0, 1], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          }),
+        }}
+      >
+        <span
+          style={{
+            fontFamily: FONT_FAMILY,
+            fontWeight: 800,
+            fontSize: 22,
+            color: COLORS.orange,
+          }}
+        >
+          Le test = acceptance criteria. Claude peut pas tricher : tu l'as écrit avant.
+        </span>
       </div>
     </AbsoluteFill>
   );
@@ -511,7 +798,7 @@ const J2S6: React.FC = () => {
     'Pointe les fichiers',
     'Décris le résultat attendu',
     '/clear après chaque feature',
-    'Trucs complexes : plan d\'abord',
+    'Cas complexes : plan d\'abord',
   ];
   return (
     <AbsoluteFill
@@ -610,7 +897,7 @@ const SlideFade: React.FC<{children: React.ReactNode}> = ({children}) => {
   return <AbsoluteFill style={{opacity: o}}>{children}</AbsoluteFill>;
 };
 
-export const J2_SLIDE_COMPONENTS = [J2S0, J2S1, J2S2, J2S3, J2S4, J2S5, J2S6, J2S7];
+export const J2_SLIDE_COMPONENTS = [J2S0, J2S1, J2S2, J2S3, J2S4, J2S4b, J2S5, J2S5b, J2S6, J2S7];
 export const J2_SLIDE_COUNT = J2_SLIDE_COMPONENTS.length;
 export const J2_TOTAL = SLIDE * J2_SLIDE_COUNT;
 

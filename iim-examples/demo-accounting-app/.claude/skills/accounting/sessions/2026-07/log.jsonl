@@ -1,0 +1,8 @@
+{"timestamp":"2026-07-01T09:17:53.258Z","script":"calculate-invoice","input":{"invoiceId":"A","lines":1,"promo":null},"output":{"ht":100,"ttc":120}}
+{"timestamp":"2026-07-01T09:17:53.259Z","script":"calculate-invoice","input":{"invoiceId":"B","lines":1,"promo":null},"output":{"ht":100,"ttc":110}}
+{"timestamp":"2026-07-01T09:17:53.259Z","script":"calculate-invoice","input":{"invoiceId":"C","lines":1,"promo":null},"output":{"ht":200,"ttc":240}}
+{"timestamp":"2026-07-01T09:17:53.259Z","script":"summarize-month","input":{"month":"2026-06","invoiceCount":4},"output":{"count":3,"totalTtc":470}}
+{"timestamp":"2026-07-01T09:17:53.260Z","script":"calculate-invoice","input":{"invoiceId":"GRACE_TOLERATED","lines":1,"promo":null},"output":{"ht":50,"ttc":60}}
+{"timestamp":"2026-07-01T09:17:53.260Z","script":"calculate-invoice","input":{"invoiceId":"SMALL_OVERDUE","lines":1,"promo":null},"output":{"ht":50,"ttc":60}}
+{"timestamp":"2026-07-01T09:17:53.260Z","script":"calculate-invoice","input":{"invoiceId":"BIG_OVERDUE_CRITICAL","lines":1,"promo":null},"output":{"ht":1000,"ttc":1200}}
+{"timestamp":"2026-07-01T09:17:53.260Z","script":"detect-overdue","input":{"today":"2026-07-15","invoiceCount":5},"output":{"overdueCount":3}}

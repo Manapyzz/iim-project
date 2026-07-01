@@ -1030,7 +1030,7 @@ const S9: React.FC = () => {
   const frame = useCurrentFrame();
   const days = [
     {label: 'J1 — Lundi', detail: 'Vibe coding. Découverte des limites.', color: COLORS.orange},
-    {label: 'J2 — Mardi', detail: 'Cadrage. Skills. Scripts.', color: COLORS.text},
+    {label: 'J2 — Mardi', detail: 'Cadrage. Scripts. Gates.', color: COLORS.text},
     {label: 'J3 — Mercredi', detail: 'Outils externes. MCP, sous-agents, plans.', color: COLORS.text},
     {label: 'J4 — Jeudi', detail: 'Audit. Soutenance.', color: COLORS.blue},
   ];

@@ -1,0 +1,260 @@
+[
+  {
+    "id": "INV-2026-06-001",
+    "issuedAt": "2026-06-02",
+    "dueAt": "2026-06-16",
+    "client": {"name": "Louis Martin", "email": "louis.martin@example.fr"},
+    "lines": [
+      {"label": "Ticket soirée été", "quantity": 2, "unitPriceHt": 15, "tvaType": "standard"}
+    ],
+    "paidAt": "2026-06-05"
+  },
+  {
+    "id": "INV-2026-06-002",
+    "issuedAt": "2026-06-03",
+    "dueAt": "2026-06-17",
+    "client": {"name": "Marie Dupont", "email": "marie.dupont@example.fr"},
+    "lines": [
+      {"label": "Atelier photo", "quantity": 1, "unitPriceHt": 80, "tvaType": "standard"},
+      {"label": "Snacks", "quantity": 4, "unitPriceHt": 3, "tvaType": "super-reduit"}
+    ],
+    "promoCode": "STUDENT20",
+    "paidAt": "2026-06-08"
+  },
+  {
+    "id": "INV-2026-06-003",
+    "issuedAt": "2026-06-04",
+    "dueAt": "2026-06-18",
+    "client": {"name": "Sophie Leclerc", "email": "sophie.leclerc@example.fr"},
+    "lines": [
+      {"label": "Adhésion asso IIMPACT 2026", "quantity": 1, "unitPriceHt": 40, "tvaType": "standard"}
+    ],
+    "paidAt": null
+  },
+  {
+    "id": "INV-2026-06-004",
+    "issuedAt": "2026-06-05",
+    "dueAt": "2026-06-19",
+    "client": {"name": "Jean Bernard", "email": "jean.bernard@example.fr"},
+    "lines": [
+      {"label": "Location salle événementielle", "quantity": 1, "unitPriceHt": 250, "tvaType": "standard"}
+    ],
+    "paidAt": null
+  },
+  {
+    "id": "INV-2026-06-005",
+    "issuedAt": "2026-06-06",
+    "dueAt": "2026-06-20",
+    "client": {"name": "Louis Martin", "email": "louis.martin@example.fr"},
+    "lines": [
+      {"label": "Ticket weekend intégration", "quantity": 1, "unitPriceHt": 90, "tvaType": "standard"}
+    ],
+    "paidAt": "2026-06-09"
+  },
+  {
+    "id": "INV-2026-06-006",
+    "issuedAt": "2026-06-08",
+    "dueAt": "2026-06-22",
+    "client": {"name": "Camille Rousseau", "email": "camille.rousseau@example.fr"},
+    "lines": [
+      {"label": "Cours yoga (5 séances)", "quantity": 5, "unitPriceHt": 12, "tvaType": "reduit"}
+    ],
+    "promoCode": "WELCOME10",
+    "paidAt": "2026-06-11"
+  },
+  {
+    "id": "INV-2026-06-007",
+    "issuedAt": "2026-06-09",
+    "dueAt": "2026-06-23",
+    "client": {"name": "Thomas Petit", "email": "thomas.petit@example.fr"},
+    "lines": [
+      {"label": "Atelier cuisine du monde", "quantity": 1, "unitPriceHt": 45, "tvaType": "reduit"}
+    ],
+    "paidAt": "2026-06-13"
+  },
+  {
+    "id": "INV-2026-06-008",
+    "issuedAt": "2026-06-10",
+    "dueAt": "2026-06-24",
+    "client": {"name": "Isabelle Moreau", "email": "isabelle.moreau@example.fr"},
+    "lines": [
+      {"label": "Livre-mémoire promotion IIM 2026", "quantity": 3, "unitPriceHt": 25, "tvaType": "super-reduit"}
+    ],
+    "paidAt": "2026-06-15"
+  },
+  {
+    "id": "INV-2026-06-009",
+    "issuedAt": "2026-06-10",
+    "dueAt": "2026-06-24",
+    "client": {"name": "Louis Martin", "email": "louis.martin@example.fr"},
+    "lines": [
+      {"label": "Merchandising t-shirt asso", "quantity": 3, "unitPriceHt": 18, "tvaType": "standard"}
+    ],
+    "paidAt": "2026-06-12"
+  },
+  {
+    "id": "INV-2026-06-010",
+    "issuedAt": "2026-06-11",
+    "dueAt": "2026-06-25",
+    "client": {"name": "Antoine Girard", "email": "antoine.girard@example.fr"},
+    "lines": [
+      {"label": "Sponsoring event finale IIM Games", "quantity": 1, "unitPriceHt": 800, "tvaType": "standard"}
+    ],
+    "promoCode": "BLACKFRIDAY",
+    "paidAt": null
+  },
+  {
+    "id": "INV-2026-06-011",
+    "issuedAt": "2026-06-12",
+    "dueAt": "2026-06-26",
+    "client": {"name": "Céline Lefevre", "email": "celine.lefevre@example.fr"},
+    "lines": [
+      {"label": "Formation Excel avancé", "quantity": 1, "unitPriceHt": 120, "tvaType": "standard"}
+    ],
+    "paidAt": "2026-06-18"
+  },
+  {
+    "id": "INV-2026-06-012",
+    "issuedAt": "2026-06-13",
+    "dueAt": "2026-06-27",
+    "client": {"name": "Marc Vasseur", "email": "marc.vasseur@example.fr"},
+    "lines": [
+      {"label": "Adhésion asso IIMPACT 2026", "quantity": 1, "unitPriceHt": 40, "tvaType": "standard"}
+    ],
+    "promoCode": "STUDENT20",
+    "paidAt": "2026-06-14"
+  },
+  {
+    "id": "INV-2026-06-013",
+    "issuedAt": "2026-06-14",
+    "dueAt": "2026-06-28",
+    "client": {"name": "Nadia Amrani", "email": "nadia.amrani@example.fr"},
+    "lines": [
+      {"label": "Atelier photo (avancé)", "quantity": 1, "unitPriceHt": 120, "tvaType": "standard"}
+    ],
+    "paidAt": "2026-06-16"
+  },
+  {
+    "id": "INV-2026-06-014",
+    "issuedAt": "2026-06-15",
+    "dueAt": "2026-06-29",
+    "client": {"name": "Rémi Girard", "email": "remi.girard@example.fr"},
+    "lines": [
+      {"label": "Ticket concert asso", "quantity": 2, "unitPriceHt": 22, "tvaType": "standard"}
+    ],
+    "paidAt": null
+  },
+  {
+    "id": "INV-2026-06-015",
+    "issuedAt": "2026-06-16",
+    "dueAt": "2026-06-30",
+    "client": {"name": "Louis Martin", "email": "louis.martin@example.fr"},
+    "lines": [
+      {"label": "Ticket concert asso", "quantity": 1, "unitPriceHt": 22, "tvaType": "standard"},
+      {"label": "Merchandising sweat asso", "quantity": 1, "unitPriceHt": 35, "tvaType": "standard"}
+    ],
+    "paidAt": "2026-06-19"
+  },
+  {
+    "id": "INV-2026-06-016",
+    "issuedAt": "2026-06-17",
+    "dueAt": "2026-07-01",
+    "client": {"name": "Julia Cohen", "email": "julia.cohen@example.fr"},
+    "lines": [
+      {"label": "Atelier cuisine du monde", "quantity": 2, "unitPriceHt": 45, "tvaType": "reduit"}
+    ],
+    "paidAt": "2026-06-25"
+  },
+  {
+    "id": "INV-2026-06-017",
+    "issuedAt": "2026-06-18",
+    "dueAt": "2026-07-02",
+    "client": {"name": "Kévin Roussel", "email": "kevin.roussel@example.fr"},
+    "lines": [
+      {"label": "Location salle événementielle", "quantity": 1, "unitPriceHt": 250, "tvaType": "standard"}
+    ],
+    "paidAt": null
+  },
+  {
+    "id": "INV-2026-06-018",
+    "issuedAt": "2026-06-19",
+    "dueAt": "2026-07-03",
+    "client": {"name": "Amélie Bonnet", "email": "amelie.bonnet@example.fr"},
+    "lines": [
+      {"label": "Livre-mémoire promotion IIM 2026", "quantity": 1, "unitPriceHt": 25, "tvaType": "super-reduit"}
+    ],
+    "paidAt": "2026-06-22"
+  },
+  {
+    "id": "INV-2026-06-019",
+    "issuedAt": "2026-06-20",
+    "dueAt": "2026-07-04",
+    "client": {"name": "Étienne Marchand", "email": "etienne.marchand@example.fr"},
+    "lines": [
+      {"label": "Formation Excel avancé", "quantity": 1, "unitPriceHt": 120, "tvaType": "standard"}
+    ],
+    "promoCode": "WELCOME10",
+    "paidAt": null
+  },
+  {
+    "id": "INV-2026-06-020",
+    "issuedAt": "2026-06-22",
+    "dueAt": "2026-07-06",
+    "client": {"name": "Louis Martin", "email": "louis.martin@example.fr"},
+    "lines": [
+      {"label": "Cours yoga (5 séances)", "quantity": 5, "unitPriceHt": 12, "tvaType": "reduit"}
+    ],
+    "paidAt": "2026-06-25"
+  },
+  {
+    "id": "INV-2026-06-021",
+    "issuedAt": "2026-06-23",
+    "dueAt": "2026-07-07",
+    "client": {"name": "Sarah Weill", "email": "sarah.weill@example.fr"},
+    "lines": [
+      {"label": "Merchandising bundle (t-shirt + sac)", "quantity": 1, "unitPriceHt": 45, "tvaType": "standard"}
+    ],
+    "paidAt": "2026-06-26"
+  },
+  {
+    "id": "INV-2026-06-022",
+    "issuedAt": "2026-06-25",
+    "dueAt": "2026-07-09",
+    "client": {"name": "Paul Charpentier", "email": "paul.charpentier@example.fr"},
+    "lines": [
+      {"label": "Sponsoring event mini-hack", "quantity": 1, "unitPriceHt": 300, "tvaType": "standard"}
+    ],
+    "paidAt": null
+  },
+  {
+    "id": "INV-2026-06-023",
+    "issuedAt": "2026-06-27",
+    "dueAt": "2026-07-11",
+    "client": {"name": "Diane Perrin", "email": "diane.perrin@example.fr"},
+    "lines": [
+      {"label": "Adhésion asso IIMPACT 2026", "quantity": 1, "unitPriceHt": 40, "tvaType": "standard"}
+    ],
+    "paidAt": "2026-06-29"
+  },
+  {
+    "id": "INV-2026-06-024",
+    "issuedAt": "2026-06-28",
+    "dueAt": "2026-07-12",
+    "client": {"name": "Hugo Fabre", "email": "hugo.fabre@example.fr"},
+    "lines": [
+      {"label": "Ticket weekend intégration", "quantity": 1, "unitPriceHt": 90, "tvaType": "standard"}
+    ],
+    "paidAt": null
+  },
+  {
+    "id": "INV-2026-06-025",
+    "issuedAt": "2026-06-30",
+    "dueAt": "2026-07-14",
+    "client": {"name": "Aïcha Benali", "email": "aicha.benali@example.fr"},
+    "lines": [
+      {"label": "Livre-mémoire promotion IIM 2026", "quantity": 2, "unitPriceHt": 25, "tvaType": "super-reduit"},
+      {"label": "Adhésion asso IIMPACT 2026", "quantity": 1, "unitPriceHt": 40, "tvaType": "standard"}
+    ],
+    "paidAt": "2026-07-01"
+  }
+]
