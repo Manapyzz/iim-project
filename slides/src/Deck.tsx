@@ -3,6 +3,7 @@ import {Player, PlayerRef} from '@remotion/player';
 import {SlidesComp, SLIDE, SLIDE_COUNT, TOTAL} from './Slides';
 import {J2SlidesComp, J2_SLIDE_COUNT, J2_TOTAL} from './J2Slides';
 import {J3SlidesComp, J3_SLIDE_COUNT, J3_TOTAL} from './J3Slides';
+import {J4SlidesComp, J4_SLIDE_COUNT, J4_TOTAL} from './J4Slides';
 
 /**
  * Deck de présentation type PowerPoint.
@@ -30,11 +31,12 @@ export const Deck: React.FC = () => {
   // J3 est public (mercredi 01/07 : le J3 démarre, plus besoin de protection).
   const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
   const jParam = params?.get('j');
-  const isJ3 = jParam === '3';
-  const isJ2 = !isJ3 && jParam === '2';
-  const ActiveComp = isJ3 ? J3SlidesComp : isJ2 ? J2SlidesComp : SlidesComp;
-  const ActiveCount = isJ3 ? J3_SLIDE_COUNT : isJ2 ? J2_SLIDE_COUNT : SLIDE_COUNT;
-  const ActiveTotal = isJ3 ? J3_TOTAL : isJ2 ? J2_TOTAL : TOTAL;
+  const isJ4 = jParam === '4';
+  const isJ3 = !isJ4 && jParam === '3';
+  const isJ2 = !isJ4 && !isJ3 && jParam === '2';
+  const ActiveComp = isJ4 ? J4SlidesComp : isJ3 ? J3SlidesComp : isJ2 ? J2SlidesComp : SlidesComp;
+  const ActiveCount = isJ4 ? J4_SLIDE_COUNT : isJ3 ? J3_SLIDE_COUNT : isJ2 ? J2_SLIDE_COUNT : SLIDE_COUNT;
+  const ActiveTotal = isJ4 ? J4_TOTAL : isJ3 ? J3_TOTAL : isJ2 ? J2_TOTAL : TOTAL;
 
   const goTo = useCallback((i: number) => {
     const clamped = Math.max(0, Math.min(ActiveCount - 1, i));
@@ -192,7 +194,7 @@ export const Deck: React.FC = () => {
           zIndex: 10,
         }}
       >
-        {isJ3 ? 'J3 — SKILLS' : isJ2 ? 'J2 — CADRAGE' : 'J1 — THÉORIE'}
+        {isJ4 ? 'J4 — WORKFLOWS' : isJ3 ? 'J3 — SKILLS' : isJ2 ? 'J2 — CADRAGE' : 'J1 — THÉORIE'}
       </div>
 
       {/* Dots progression + boutons mobile en bas */}
